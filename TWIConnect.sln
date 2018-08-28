@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2003
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TWIConnect.Client", "TWIConnect.Client\TWIConnect.Client.csproj", "{CC97B355-87E9-4DB1-A209-9A429169E14B}"
 EndProject
@@ -10,6 +10,11 @@ EndProject
 Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "TWIConnect.Client.Setup", "TWIConnect.Client.Setup\TWIConnect.Client.Setup.wixproj", "{AF489109-A8AA-460F-A82E-6C278B819E6C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TWIConnect.Client.Test", "TWIConnect.Client.Test\TWIConnect.Client.Test.csproj", "{361B5374-7C14-45D2-BEB6-AA09C3C0C123}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{5488076E-1AB3-4CC5-BB1F-A84DE9C14B75}"
+	ProjectSection(SolutionItems) = preProject
+		readme.md = readme.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -64,6 +69,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6D1CB238-0363-48BD-88C9-7B5FAB52A359}
 	EndGlobalSection
 	GlobalSection(SubversionScc) = preSolution
 		Svn-Managed = True
