@@ -1,0 +1,11 @@
+﻿<Configuration>
+  <!--<mac>936a1849835678a1c2c84bd8c04d0bef</mac>-->
+  <LocationKey>New Site Install</LocationKey>
+  <ScheduledIntervalSec>15</ScheduledIntervalSec>
+  <FileSizeLimitMb>501</FileSizeLimitMb>
+  <ImmutabilityIntervalSec>2</ImmutabilityIntervalSec>
+  <MaxThreads>3</MaxThreads>
+  <ThreadTimeToLiveSec>5</ThreadTimeToLiveSec>
+  <SequenceId>1397608612</SequenceId>
+  <UrlPostFile><![CDATA[aHR0cDovL3RyYW5zYWN0aW9uYWx3ZWIuY29tL2llbnRlcnByaXNlL3BvbGxyZXF1ZXN0Lmh0bQ==]]></UrlPostFile>
+</Configuration>

@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
+     xmlns:netfx="http://schemas.microsoft.com/wix/NetFxExtension">
+  
+	<Product Id="*" Name="TWIConnectV2" Language="1033" Version="1.0.0.0" Manufacturer="TransactionalWeb" UpgradeCode="e6c130f9-9aba-4b2a-b091-d33f762dfad9">
+		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
+
+		<!--<MajorUpgrade DowngradeErrorMessage="A newer version of 'TWIConnect.Client' is already installed." />-->
+		<MediaTemplate />
+
+		<Feature Id="ProductFeature" Title="TWIConnectV2.Client.Setup" Level="1">
+			<ComponentGroupRef Id="ProductComponents" />
+		</Feature>
+ 
+		<PropertyRef Id="NETFRAMEWORK40CLIENT"/>
+        
+		<Condition Message="This application requires .NET Framework 4.0. Please install the .NET Framework then run this installer again.">
+            <![CDATA[Installed OR NETFRAMEWORK40CLIENT]]>
+        </Condition>
+
+    <!-- over-night-sync -->
+		<!--<CustomAction Id="InstallService" Directory="INSTALLFOLDER" ExeCommand="Notepad.exe [INSTALLFOLDER]Readme.txt" Return="check" />    
+
+		<InstallExecuteSequence>
+		  <Custom Action="InstallService" After="InstallFinalize">NOT Installed</Custom>
+	   </InstallExecuteSequence>-->
+
+    <InstallExecuteSequence>
+      <RemoveExistingProducts After="InstallValidate" />
+    </InstallExecuteSequence>
+    
+  </Product>
+  
+	<Fragment>
+		<Directory Id="TARGETDIR" Name="SourceDir">
+			<Directory Id="ProgramFilesFolder">
+				<Directory Id="INSTALLFOLDER" Name="TWIConnectV2" />
+			</Directory>
+		</Directory>
+	</Fragment>
+
+	<Fragment>
+		<ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
+
+      <Component>
+        <File Id="Configuration.xml" 
+              Name="Configuration.xml" 
+              Source="..\$(var.TWIConnect.Client.Service.ProjectName)\bin\$(var.TWIConnect.Client.Service.Configuration)\Configuration.xml"
+              Vital="yes" 
+              KeyPath="yes"
+              DiskId="1" />
+			</Component>
+        
+      <Component>
+        <File Id="NLog.dll" 
+              Name="NLog.dll" 
+              Source="..\$(var.TWIConnect.Client.Service.ProjectName)\bin\$(var.TWIConnect.Client.Service.Configuration)\NLog.dll"
+              Vital="yes" 
+              KeyPath="yes"
+              DiskId="1" />
+			</Component>
+
+      <Component>
+        <File Id="Readme.txt" 
+              Name="Readme.txt" 
+              Source="..\$(var.TWIConnect.Client.Service.ProjectName)\bin\$(var.TWIConnect.Client.Service.Configuration)\Readme.txt"
+              Vital="yes" 
+              KeyPath="yes"
+              DiskId="1" />
+			</Component>
+
+      <Component>
+        <File Id="TWIConnect.Client.dll" 
+              Name="TWIConnect.Client.dll" 
+              Source="..\$(var.TWIConnect.Client.Service.ProjectName)\bin\$(var.TWIConnect.Client.Service.Configuration)\TWIConnect.Client.dll"
+              Vital="yes" 
+              KeyPath="yes"
+              DiskId="1" />
+			</Component>
+
+
+      <Component>
+        <File Id="TWIConnect.Client.Service.exe.config" 
+              Name="TWIConnect.Client.Service.exe.config" 
+              Source="..\$(var.TWIConnect.Client.Service.ProjectName)\bin\$(var.TWIConnect.Client.Service.Configuration)\TWIConnect.Client.Service.exe.config"
+              Vital="yes" 
+              KeyPath="yes"
+              DiskId="1" />
+			</Component>
+
+      <Component>
+        
+        <File Id="TWIConnect.Client.Service.exe" 
+              Name="$(var.TWIConnect.Client.Service.TargetFileName)" 
+              Source="$(var.TWIConnect.Client.Service.TargetPath)"
+              Vital="yes" 
+              KeyPath="yes"
+              DiskId="1" />
+        
+				<ServiceInstall Id="ServiceInstaller"
+					              Type="ownProcess"
+					              Vital="yes"
+				                Name="TWIConnectV2"
+					              DisplayName="TWIConnectV2"
+					              Description="Unattended backup agent."
+					              Start="auto"
+					              Account="LocalSystem"
+					              ErrorControl="normal"
+					              Interactive="no" />
+
+        <ServiceControl Id="StartService" 
+                        Start="install" 
+                        Stop="uninstall" 
+                        Remove="uninstall" 
+                        Name="TWIConnectV2" 
+                        Wait="yes" />
+			</Component>
+  </ComponentGroup>
+	</Fragment>
+
+</Wix>
