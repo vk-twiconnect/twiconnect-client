@@ -13,10 +13,16 @@
 		</Feature>
  
 		<PropertyRef Id="NETFRAMEWORK40CLIENT"/>
-        
-		<Condition Message="This application requires .NET Framework 4.0. Please install the .NET Framework then run this installer again.">
-            <![CDATA[Installed OR NETFRAMEWORK40CLIENT]]>
-        </Condition>
+
+    <Property Id="CONFIG_XML">
+      <DirectorySearch Id="SOURCEDIR_SEARCH" Path="[SourceDir]" Depth="0">
+        <FileSearch Id="CONFIG_XML_SEARCH" Name="Configuration.xml" />
+      </DirectorySearch>
+    </Property>
+    
+    <Condition Message="This application requires .NET Framework 4.0. Please install the .NET Framework then run this installer again.">
+      <![CDATA[Installed OR NETFRAMEWORK40CLIENT]]>
+    </Condition>
 
     <!-- over-night-sync -->
 		<!--<CustomAction Id="InstallService" Directory="INSTALLFOLDER" ExeCommand="Notepad.exe [INSTALLFOLDER]Readme.txt" Return="check" />    
@@ -49,8 +55,13 @@
               Vital="yes" 
               KeyPath="yes"
               DiskId="1" />
+        <Condition>NOT CONFIG_XML</Condition>
 			</Component>
-        
+
+      <Component Id="Custom_Config_XML" Guid="7A6B6DC4-FB83-4CA1-BB6F-1BF48E668F0A">
+        <CopyFile Id="CopyXMLFile" DestinationProperty="INSTALLFOLDER" SourceProperty="SOURCEDIR" SourceName="Configuration.xml" Delete="no" />
+      </Component>
+      
       <Component>
         <File Id="NLog.dll" 
               Name="NLog.dll" 
