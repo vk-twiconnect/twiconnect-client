@@ -18,7 +18,7 @@
   "ThreadTimeToLiveSec": "5",
   "SequenceId": "1397608612",
   “ObjectType”:  “none”,
-  "UrlPostFile": "http://transactionalweb.com/ienterprise/pollrequest.htm",
+  "Uri": "http://transactionalweb.com/ienterprise/pollrequest.htm",
   "IgnoreSizeLimit": "False",
   "IgnoreImmutabilityInterval": "False",
   "SendVersionAfterTimeStampUtc": "1970-01-01T01:01:40"
@@ -92,7 +92,7 @@
   "ThreadTimeToLiveSec": "5",
   "SequenceId": "1397608612",
   "ObjectType":  "None",
-  "UrlPostFile": "http://transactionalweb.com/ienterprise/pollrequest.htm",
+  "Uri": "http://transactionalweb.com/ienterprise/pollrequest.htm",
   "IgnoreSizeLimit": "False",
   "IgnoreImmutabilityInterval": "False",
   "SendVersionAfterTimeStampUtc": "1970-01-01T01:01:40"
@@ -107,7 +107,7 @@
   "DerivedMachineHash": "a3d61dcd929f262dc652ffce4ef61231",
   "ObjectType":  "File",
   "SequenceId": "1397608612",
-  "UrlPostFile": "http://transactionalweb.com/ienterprise/pollrequest.htm",
+  "Uri": "http://transactionalweb.com/ienterprise/pollrequest.htm",
   "IgnoreSizeLimit": "False",
   "IgnoreImmutabilityInterval": "False",
   "SendVersionAfterTimeStampUtc": "1970-01-01T01:01:40",
@@ -123,7 +123,7 @@
   "DerivedMachineHash": "a3d61dcd929f262dc652ffce4ef61231",
   "ObjectType":  "Folder",
   "SequenceId": "1397608612",
-  "UrlPostFile": "http://transactionalweb.com/ienterprise/pollrequest.htm",
+  "Uri": "http://transactionalweb.com/ienterprise/pollrequest.htm",
   "Path": "C:\\Temp"
 }
 ```
