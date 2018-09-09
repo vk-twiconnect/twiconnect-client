@@ -139,7 +139,7 @@
   "CommandLine": "dir C:"
 }
 ```
-* ThreadTimeToLive settings will limite command line execution
+* ThreadTimeToLive settings will limit command line execution
 
 
 ## Developemtn Setup
