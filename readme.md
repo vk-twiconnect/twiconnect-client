@@ -128,7 +128,7 @@
 }
 ```
 
-### Run Command Results
+### Command Results
 ```
 {
   "LocationKey": "New Site Install",
