@@ -1,5 +1,9 @@
 # Overview
 
+* TWI Client is an unattended bot running in the background as a Windows Service to upload files, collect folder meta-data, and to execute shell commands on the client
+* Server side is fully in control of the client behaviour, updating client's configuration and instructing what file/folder to upload or what command to execute 
+* Client provides no user interface for the end-user to configure
+
 ## Flow Diagram
 
 ![](./media/Flow.jpg)
