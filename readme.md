@@ -141,6 +141,7 @@
   "Path": "C:\\Temp"
 }
 ```
+* ThreadTimeToLive settings will limit time collecting folder meta-data
 
 ### Execute Command
 ```
