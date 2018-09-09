@@ -17,7 +17,7 @@
 
 ### Http-Verb
 
-* All requests will use POST verb to the uri from configuration/server response json
+* All requests will use POST verb to the uri from the configuration/server response json
 
 
 ### Current Configuration (Request #1)
