@@ -78,7 +78,7 @@
 }
 ```
 
-## Server Responsea
+## Server Responses
 
 ### Update configuration only
 
