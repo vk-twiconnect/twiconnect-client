@@ -6,6 +6,11 @@
 
 ## Client Requests
 
+### Http-Verb
+
+* All requests will use POST verb to the uri from configuration/server response json
+
+
 ### Current Configuration (Request #1)
 
 ```
