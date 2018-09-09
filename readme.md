@@ -147,7 +147,7 @@
 * ThreadTimeToLive settings will limit command line execution
 
 
-## Developemtn Setup
+## Development Setup
 
 * Windows Server 2016 Base, may work on other modern Windows OS
 * Install [Visual Studio 2017 Community Edition](https://visualstudio.microsoft.com/downloads/)
