@@ -4,6 +4,11 @@
 
 ![](./media/Flow.jpg)
 
+## Configuration.json
+
+* Each client location will use a unique configuration file
+* Setup process will distribute unique confiuration file
+
 ## Client Requests
 
 ### Http-Verb
