@@ -22,7 +22,7 @@
   "ImmutabilityIntervalSec": "2",
   "ThreadTimeToLiveSec": "5",
   "SequenceId": "1397608612",
-  ìObjectTypeî:  ìnoneî,
+  ‚ÄúObjectType‚Äù:  ‚Äúnone‚Äù,
   "Uri": "http://transactionalweb.com/ienterprise/pollrequest.htm",
   "IgnoreSizeLimit": "False",
   "IgnoreImmutabilityInterval": "False",
@@ -69,7 +69,7 @@
 }
 ```
 
-### Execute Command Results (Request #4)
+### Execute Command (Request #4)
 
 ```
 {
@@ -133,7 +133,7 @@
 }
 ```
 
-### Command Results
+### Execute Command
 ```
 {
   "LocationKey": "New Site Install",
