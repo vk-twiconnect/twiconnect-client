@@ -20,7 +20,7 @@
 * All requests will use POST verb to the uri from the configuration/server response json
 
 
-### Current Configuration (Request #1)
+### Current Configuration
 
 ```
 {
@@ -39,7 +39,7 @@
 }
 ```
 
-### Post a file (Request #2)
+### Post a File
 
 ```
 {
@@ -54,7 +54,7 @@
 }
 ```
 
-### Post folder meta-data (Request #3)
+### Post Folder Meta-Data
 
 ```
 {
@@ -78,7 +78,7 @@
 }
 ```
 
-### Execute Command (Request #4)
+### Execute Command
 
 ```
 {
@@ -94,7 +94,7 @@
 
 ## Server Responses
 
-### Update configuration only
+### Update Configuration Only
 
 ```
 {
@@ -113,7 +113,7 @@
 }
 ```
 
-### Upload file
+### Upload File
 
 ```
 {
@@ -129,7 +129,7 @@
 }
 ```
 
-### Upload folder meta-data
+### Upload Folder Meta-data
 
 ```
 {
