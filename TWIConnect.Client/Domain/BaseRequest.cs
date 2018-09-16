@@ -9,20 +9,8 @@ namespace TWIConnect.Client.Domain
 {
     public abstract class BaseRequest
     {
-        [XmlElement("DerivedMachineHash")]
-        public string InstallationId
-        {
-            get
-            {
-                return Configuration.GetInstallationId();
-            }
-            set
-            {
-                //Ignore input
-                //this._installationId = value;
-            }
-        }
-
-        public string LocationKey { get; set; }
+      [XmlElement("DerivedMachineHash")]
+      public string InstallationId { get; set; }
+      public string LocationKey { get; set; }
     }
 }

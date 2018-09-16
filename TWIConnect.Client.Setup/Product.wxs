@@ -2,7 +2,7 @@
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
      xmlns:netfx="http://schemas.microsoft.com/wix/NetFxExtension">
   
-	<Product Id="*" Name="TWIConnectV2" Language="1033" Version="1.0.0.0" Manufacturer="TransactionalWeb" UpgradeCode="e6c130f9-9aba-4b2a-b091-d33f762dfad9">
+	<Product Id="*" Name="TWIConnectV3" Language="1033" Version="1.0.0.0" Manufacturer="TransactionalWeb" UpgradeCode="e6c130f9-9aba-4b2a-b091-d33f762dfad9">
 		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
 
 		<!--<MajorUpgrade DowngradeErrorMessage="A newer version of 'TWIConnect.Client' is already installed." />-->

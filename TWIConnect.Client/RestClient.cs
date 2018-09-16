@@ -67,7 +67,7 @@ namespace TWIConnect.Client
 
         internal Domain.ConfigurationResponse GetRemoteConfiguration(Domain.ConfigurationRequest configurationRequest)
         {
-            string response = this.PostRequest(this.Configuration.UrlPostFile, configurationRequest.Serialize());
+            string response = this.PostRequest(this.Configuration.Uri, configurationRequest.Serialize());
             return ParseResponse<Domain.ConfigurationResponse>(response);
         }
 
@@ -79,8 +79,8 @@ namespace TWIConnect.Client
             {
                 string content = fileRequest.Serialize();
                 System.Diagnostics.Stopwatch stopWatch = System.Diagnostics.Stopwatch.StartNew();
-                Utilities.Logger.Log(NLog.LogLevel.Trace, Resources.Messages.StartUploadFile, this.Configuration.UrlPostFile, content);
-                response = this.PostRequest(this.Configuration.UrlPostFile, content);
+                Utilities.Logger.Log(NLog.LogLevel.Trace, Resources.Messages.StartUploadFile, this.Configuration.Uri, content);
+                response = this.PostRequest(this.Configuration.Uri, content);
                 Utilities.Logger.Log(NLog.LogLevel.Trace, Resources.Messages.EndOfExecution, "RestClient.UploadFile", Logger.GetTimeElapsed(stopWatch));
                 Utilities.Logger.Log(NLog.LogLevel.Trace, "RestClient.UploadFile Response: " + response);
             }
@@ -95,7 +95,7 @@ namespace TWIConnect.Client
 
         internal Domain.ConfigurationResponse SelectFile(Domain.SelectFileRequest request)
         {
-            string response = this.PostRequest(this.Configuration.UrlPostFile, request.Serialize());
+            string response = this.PostRequest(this.Configuration.Uri, request.Serialize());
             return ParseResponse<Domain.ConfigurationResponse>(response);
         }
 

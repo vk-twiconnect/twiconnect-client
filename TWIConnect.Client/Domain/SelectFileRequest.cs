@@ -15,7 +15,7 @@ namespace TWIConnect.Client.Domain
 
         public SelectFileRequest(Domain.Configuration configuration, Domain.FileSettings fileSettings, IEnumerable<Domain.File> fileInfos)
         {
-            this.InstallationId = configuration.InstallationId;
+            this.InstallationId = configuration.DerivedMachineHash;
             this.LocationKey = configuration.LocationKey;
             this.FolderName = fileSettings.Name;
             this.Files = new HashSet<File>(fileInfos);

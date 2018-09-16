@@ -32,7 +32,7 @@
   "ImmutabilityIntervalSec": "2",
   "ThreadTimeToLiveSec": "5",
   "SequenceId": "1397608612",
-  “ObjectType”:  “none”,
+  "ObjectType":  "None",
   "Uri": "http://transactionalweb.com/ienterprise/pollrequest.htm",
   "IgnoreSizeLimit": "False",
   "IgnoreImmutabilityInterval": "False",
