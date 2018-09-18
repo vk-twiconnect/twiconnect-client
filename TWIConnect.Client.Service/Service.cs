@@ -1,14 +1,5 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Configuration.Install;
-using System.Data;
-using System.Diagnostics;
-using System.Linq;
 using System.ServiceProcess;
-using System.Text;
-using System.Threading.Tasks;
 using System.Timers;
 
 namespace TWIConnect.Client.Service
@@ -56,9 +47,9 @@ namespace TWIConnect.Client.Service
         {
             try
             {
-                Domain.Configuration configuration = Domain.Configuration.Load();
-                TWIConnect.Client.Processor.Run(configuration);
-                this.Timer.Interval = ((configuration != null) ? configuration.ScheduledIntervalSec : defaultIntervalSec) * 1000;
+                Configuration configuration = Configuration.Load();
+                //TWIConnect.Client.Processor.Run(configuration);
+                //this.Timer.Interval = ((configuration != null) ? configuration.ScheduledIntervalSec : defaultIntervalSec) * 1000;
             }
             catch
             {

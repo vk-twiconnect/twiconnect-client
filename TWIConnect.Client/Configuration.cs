@@ -12,7 +12,7 @@ using Newtonsoft.Json;
 using TWIConnect.Client.Utilities;
 
 
-namespace TWIConnect.Client.Domain
+namespace TWIConnect.Client
 {
   public enum ObjectType
   {
@@ -35,7 +35,6 @@ namespace TWIConnect.Client.Domain
     //  "ImmutabilityIntervalSec": "2",
     //  "ThreadTimeToLiveSec": "5",
     //  "SequenceId": "1397608612",
-    //  “ObjectType”:  "None",
     //  "Uri": "http://transactionalweb.com/ienterprise/pollrequest.htm",
     //  "IgnoreSizeLimit": "False",
     //  "IgnoreImmutabilityInterval": "False",
@@ -47,11 +46,11 @@ namespace TWIConnect.Client.Domain
     public int ImmutabilityIntervalSec { get; set; }
     public int ThreadTimeToLiveSec { get; set; }
     public string SequenceId { get; set; }
-    public ObjectType ObjectType { get; set;  }
+    
     public string Uri { get; set; }
     public bool IgnoreSizeLimit { get; set; }
     public bool IgnoreImmutabilityInterval { get; set; }
-    public DateTime SendVersionAfterTimeStampUtc { get; set; }
+    public DateTime? SendVersionAfterTimeStampUtc { get; set; }
 
     private string derivedMachineHash = null;
     public string DerivedMachineHash
@@ -98,7 +97,7 @@ namespace TWIConnect.Client.Domain
     /// Load local configuration
     /// </summary>
     /// <returns>Configuration</returns>
-    public static Domain.Configuration Load()
+    public static Configuration Load()
     {
       try
       {
@@ -135,55 +134,34 @@ namespace TWIConnect.Client.Domain
       return JsonConvert.SerializeObject(this);
     }
 
-    ///// <summary>
-    ///// Load remote configuration
-    ///// In case of an exception return null
-    ///// </summary>
-    ///// <param name="uri"></param>
-    ///// <returns></returns>
-    //private void Load(Uri uri)
-    //{
-    //  try
-    //  {
-    //    System.Diagnostics.Stopwatch stopWatch = System.Diagnostics.Stopwatch.StartNew(); ;
-    //    Utilities.Logger.Log(NLog.LogLevel.Trace, Resources.Messages.StartReadingRemoteConfiguration, uri);
+    /// <summary>
+    /// Update local configuration using response from the server
+    /// </summary>
+    /// <param name="newConfiguration"></param>
+    public void Update(Configuration newConfiguration)
+    {
+      if (newConfiguration != null)
+      {
+        /*
 
-
-
-    //    Domain.ConfigurationRequest request = new ConfigurationRequest(localConfiguration);
-    //    Domain.ConfigurationResponse configurationResponse = new RestClient(localConfiguration).GetRemoteConfiguration(request);
-    //    Utilities.Logger.Log(NLog.LogLevel.Trace, Resources.Messages.EndOfExecution, "Configuration.TryLoadRemoteConfiguration", Logger.GetTimeElapsed(stopWatch));
-    //    this._configurationResponse = configurationResponse;
-    //  }
-    //  catch (Exception ex)
-    //  {
-    //    Utilities.Logger.Log(ex);
-    //    this._configurationResponse = null;
-    //  }
-    //}
-
-    ///// <summary>
-    ///// Update local configuration using response from the server
-    ///// </summary>
-    ///// <param name="configurationResponse"></param>
-    //internal void UpdateLocalConfiguration(Domain.ConfigurationResponse configurationResponse)
-    //{
-    //    if (configurationResponse != null)
-    //    {
-    //        this.LocationKey = SelectValue<string>(configurationResponse.LocationKey, this.LocationKey);
-    //        this.UrlPostFile = SelectValue<string>(configurationResponse.UrlPostFile, this.UrlPostFile);
-    //        this.ScheduledIntervalSec = SelectValue<int?>(configurationResponse.ScheduledIntervalSec, (int?)this.ScheduledIntervalSec).Value;
-    //        this.FileSizeLimitMb = SelectValue<int?>(configurationResponse.FileSizeLimitMb, (int?)this.FileSizeLimitMb).Value;
-    //        this.ImmutabilityIntervalSec = SelectValue<int?>(configurationResponse.ImmutabilityIntervalSec, (int?)this.ImmutabilityIntervalSec).Value;
-    //        this.MaxThreads = SelectValue<int?>(configurationResponse.MaxThreads, (int?)this.MaxThreads).Value;
-    //        this.ThreadTimeToLiveSec = SelectValue<int?>(configurationResponse.ThreadTimeToLiveSec, (int?)this.ThreadTimeToLiveSec).Value;
-    //        this.SequenceId = SelectValue<string>(configurationResponse.SequenceId, this.SequenceId);
-    //        this.Files = configurationResponse.Files ?? new HashSet<FileSettings>();
-    //        this.RunCommand = this.SelectValue<string>(configurationResponse.RunCommand, this.RunCommand);
-    //        this.RunCommandArgs = this.SelectValue<string>(configurationResponse.RunCommandArgs, this.RunCommandArgs);
-    //        this.Save(GetConfigurationFilePath());
-    //    }
-    //}
+        public ObjectType ObjectType { get; set;  }
+        public string Uri { get; set; }
+        public bool IgnoreSizeLimit { get; set; }
+        public bool IgnoreImmutabilityInterval { get; set; }
+        public DateTime SendVersionAfterTimeStampUtc { get; set; }
+        */
+        this.LocationKey = SelectValue<string>(newConfiguration.LocationKey, this.LocationKey);
+        this.FileSizeLimitMb = SelectValue<int?>(newConfiguration.FileSizeLimitMb, (int?)this.FileSizeLimitMb).Value;
+        this.ImmutabilityIntervalSec = SelectValue<int?>(newConfiguration.ImmutabilityIntervalSec, (int?)this.ImmutabilityIntervalSec).Value;
+        this.ThreadTimeToLiveSec = SelectValue<int?>(newConfiguration.ThreadTimeToLiveSec, (int?)this.ThreadTimeToLiveSec).Value;
+        this.SequenceId = SelectValue<string>(newConfiguration.SequenceId, this.SequenceId);
+        this.Uri = SelectValue<string>(newConfiguration.Uri, this.Uri);
+        this.ScheduledIntervalSec = SelectValue<int?>(newConfiguration.ScheduledIntervalSec, (int?)this.ScheduledIntervalSec).Value;
+        this.ThreadTimeToLiveSec = SelectValue<int?>(newConfiguration.ThreadTimeToLiveSec, (int?)this.ThreadTimeToLiveSec).Value;
+        this.SequenceId = SelectValue<string>(newConfiguration.SequenceId, this.SequenceId);
+        this.Save();
+      }
+    }
 
     /// <summary>
     /// Update configuration settings using remote configuration response
@@ -217,17 +195,13 @@ namespace TWIConnect.Client.Domain
       object fileLock = new object();
       try
       {
-        System.Diagnostics.Stopwatch stopWatch = System.Diagnostics.Stopwatch.StartNew();
-        Utilities.Logger.Log(NLog.LogLevel.Trace, Resources.Messages.StartSavingLocalConfiguration, Configuration._configurationFile);
-                
         //Shallow copy to remove File Settings from saved file
-        Domain.Configuration configToSave = this.MemberwiseClone() as Domain.Configuration;
+        Configuration configToSave = this.MemberwiseClone() as Configuration;
 
         lock (fileLock)
         {
-            Utilities.FileSystem.WriteTextFile(_configurationFile, configToSave.Serialize());
+            Utilities.FileSystem.WriteTextFile(_configurationFile, configToSave.ToString());
         }
-        Utilities.Logger.Log(NLog.LogLevel.Trace, Resources.Messages.EndOfExecution, "Configuration.Save", Logger.GetTimeElapsed(stopWatch));
       }
       catch (Exception ex)
       {

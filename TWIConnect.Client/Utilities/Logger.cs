@@ -35,7 +35,7 @@ namespace TWIConnect.Client.Utilities
             }
             catch
             {
-                //Intentionally empty catch block to suppress an exception.
+                //Intentionally empty catch block to suppress any exception
             }
         }
 

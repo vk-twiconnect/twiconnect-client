@@ -53,14 +53,7 @@
   <ItemGroup>
     <Compile Include="Constants\Configuration.cs" />
     <Compile Include="Constants\Protocol.cs" />
-    <Compile Include="Domain\BaseRequest.cs" />
-    <Compile Include="Domain\Configuration.cs" />
-    <Compile Include="Domain\ConfigurationRequest.cs" />
-    <Compile Include="Domain\ConfigurationResponse.cs" />
-    <Compile Include="Domain\File.cs" />
-    <Compile Include="Domain\FileSettings.cs" />
-    <Compile Include="Domain\PostFileRequest.cs" />
-    <Compile Include="Domain\SelectFileRequest.cs" />
+    <Compile Include="Configuration.cs" />
     <Compile Include="Processor.cs" />
     <Compile Include="Resources\Messages.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -71,7 +64,7 @@
     <Compile Include="Utilities\Logger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RestClient.cs" />
-    <Compile Include="Utilities\Serialization.cs" />
+    <Compile Include="Utilities\Base64Serialization.cs" />
     <Compile Include="Utilities\Threading.cs" />
   </ItemGroup>
   <ItemGroup />

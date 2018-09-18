@@ -11,12 +11,12 @@ namespace TWIConnect.Client
 {
     internal class RestClient
     {
-        internal RestClient(Domain.Configuration configuration)
+        internal RestClient(Configuration configuration)
         {
             Configuration = configuration;
         }
 
-        private Domain.Configuration Configuration {get;set;}
+        private Configuration Configuration {get;set;}
 
         private WebRequest CreateRequest(string url, string method = Constants.Protocol.MethodPost, string contentType = Constants.Protocol.ContentTypeForm)
         {
@@ -51,53 +51,53 @@ namespace TWIConnect.Client
             }
         }
 
-        private T ParseResponse<T>(string response)
-        {
-            try
-            {
-                T configurationResponse = response.Deserialize<T>();
-                return configurationResponse;
-            }
-            catch (Exception ex)
-            {
-                Utilities.Logger.Log(NLog.LogLevel.Error, Resources.Messages.FailureDeserializingResponse, response ?? string.Empty);
-                throw ex;
-            }
-        }
+        //private T ParseResponse<T>(string response)
+        //{
+        //    try
+        //    {
+        //        T configurationResponse = response.Deserialize<T>();
+        //        return configurationResponse;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Utilities.Logger.Log(NLog.LogLevel.Error, Resources.Messages.FailureDeserializingResponse, response ?? string.Empty);
+        //        throw ex;
+        //    }
+        //}
 
-        internal Domain.ConfigurationResponse GetRemoteConfiguration(Domain.ConfigurationRequest configurationRequest)
-        {
-            string response = this.PostRequest(this.Configuration.Uri, configurationRequest.Serialize());
-            return ParseResponse<Domain.ConfigurationResponse>(response);
-        }
+        //internal ConfigurationResponse GetRemoteConfiguration(ConfigurationRequest configurationRequest)
+        //{
+        //    string response = this.PostRequest(this.Configuration.Uri, configurationRequest.Serialize());
+        //    return ParseResponse<ConfigurationResponse>(response);
+        //}
 
-        internal Domain.ConfigurationResponse UploadFile(Domain.PostFileRequest fileRequest)
-        {
-            string response = string.Empty;
+        //internal ConfigurationResponse UploadFile(PostFileRequest fileRequest)
+        //{
+        //    string response = string.Empty;
 
-            try
-            {
-                string content = fileRequest.Serialize();
-                System.Diagnostics.Stopwatch stopWatch = System.Diagnostics.Stopwatch.StartNew();
-                Utilities.Logger.Log(NLog.LogLevel.Trace, Resources.Messages.StartUploadFile, this.Configuration.Uri, content);
-                response = this.PostRequest(this.Configuration.Uri, content);
-                Utilities.Logger.Log(NLog.LogLevel.Trace, Resources.Messages.EndOfExecution, "RestClient.UploadFile", Logger.GetTimeElapsed(stopWatch));
-                Utilities.Logger.Log(NLog.LogLevel.Trace, "RestClient.UploadFile Response: " + response);
-            }
-            catch (Exception ex)
-            {
-                Utilities.Logger.Log(NLog.LogLevel.Error, Resources.Messages.FailurePostingFile, fileRequest.Name);
-                throw ex;
-            }
+        //    try
+        //    {
+        //        string content = fileRequest.Serialize();
+        //        System.Diagnostics.Stopwatch stopWatch = System.Diagnostics.Stopwatch.StartNew();
+        //        Utilities.Logger.Log(NLog.LogLevel.Trace, Resources.Messages.StartUploadFile, this.Configuration.Uri, content);
+        //        response = this.PostRequest(this.Configuration.Uri, content);
+        //        Utilities.Logger.Log(NLog.LogLevel.Trace, Resources.Messages.EndOfExecution, "RestClient.UploadFile", Logger.GetTimeElapsed(stopWatch));
+        //        Utilities.Logger.Log(NLog.LogLevel.Trace, "RestClient.UploadFile Response: " + response);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Utilities.Logger.Log(NLog.LogLevel.Error, Resources.Messages.FailurePostingFile, fileRequest.Name);
+        //        throw ex;
+        //    }
 
-            return this.ParseResponse<Domain.ConfigurationResponse>(response);
-        }
+        //    return this.ParseResponse<ConfigurationResponse>(response);
+        //}
 
-        internal Domain.ConfigurationResponse SelectFile(Domain.SelectFileRequest request)
-        {
-            string response = this.PostRequest(this.Configuration.Uri, request.Serialize());
-            return ParseResponse<Domain.ConfigurationResponse>(response);
-        }
+        //internal ConfigurationResponse SelectFile(SelectFileRequest request)
+        //{
+        //    string response = this.PostRequest(this.Configuration.Uri, request.Serialize());
+        //    return ParseResponse<ConfigurationResponse>(response);
+        //}
 
     }
 }

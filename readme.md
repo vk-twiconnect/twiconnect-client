@@ -65,7 +65,7 @@
   "ObjectType": "Folder",
   "FolderSize": "1234578",
   "SubFoldersCount": "35",
-  "FileCount": "3",
+  "FilesCount": "3",
   "SubFolders": [
     {"Path": "C:\\Temp\\_1"},
     {"Path": "C:\\Temp\\_2}"

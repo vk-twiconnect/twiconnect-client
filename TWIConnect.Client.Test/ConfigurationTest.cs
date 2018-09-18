@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using TWIConnect.Client.Utilities;
-using System.Xml;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace TWIConnect.Client.Test
 {
@@ -12,7 +8,7 @@ namespace TWIConnect.Client.Test
     [TestMethod]
     public void LoadFromString()
     {
-      Domain.Configuration configuration = Domain.Configuration.Load();
+      Configuration configuration = Configuration.Load();
       Assert.IsNotNull(configuration);
       Assert.AreEqual("New Site Install", configuration.LocationKey);
     }
@@ -20,7 +16,7 @@ namespace TWIConnect.Client.Test
     [TestMethod]
     public void SaveToString()
     {
-      Domain.Configuration configuration = Domain.Configuration.Load();
+      Configuration configuration = Configuration.Load();
       string json = configuration.ToString();
       Assert.IsNotNull(json);
       Assert.IsTrue(json.Contains("New Site Install"));
