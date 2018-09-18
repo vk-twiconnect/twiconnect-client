@@ -52,6 +52,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants\Configuration.cs" />
+    <Compile Include="Constants\FileNames.cs" />
+    <Compile Include="Constants\ObjectType.cs" />
     <Compile Include="Constants\Protocol.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="Processor.cs" />

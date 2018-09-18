@@ -14,30 +14,40 @@ namespace TWIConnect.Client.Utilities
     {
       bool isFolder = FileSystem.IsDirectory(path);
       var info = isFolder? LoadFolderMetaData(configuration, path) : LoadFile(configuration, path);
-      info.Add("LocationKey", configuration.LocationKey);
-      info.Add("DerivedMachineHash", configuration.DerivedMachineHash);
-      info.Add("SequenceId", configuration.SequenceId);
-      info.Add("ObjectType", isFolder? "Folder": "File");
+      info.Add(Constants.Configuration.ObjectType, isFolder? Constants.ObjectType.Folder: Constants.ObjectType.File);
+
+      #region Move out!
+        info.Add(Constants.Configuration.LocationKey, configuration.LocationKey);
+        info.Add(Constants.Configuration.DerivedMachineHash, configuration.DerivedMachineHash);
+        info.Add(Constants.Configuration.SequenceId, configuration.SequenceId);
+      #endregion
+
       return info;
     }
 
     public static IDictionary<string, object> LoadFolderMetaData(Configuration configuration, string path)
     {
-      var files = Directory.EnumerateFiles(path, "*.*", SearchOption.TopDirectoryOnly).Select(file => new { Path = file });
+      var files = Directory.EnumerateFiles(path, "*.*", SearchOption.TopDirectoryOnly).Select(
+                        file => new Dictionary<string, object>() {
+                          { Constants.Configuration.Path, file }
+                        }
+                      );
       var subFolders = Directory.EnumerateDirectories(path, "*", SearchOption.TopDirectoryOnly).Select(folder => 
-                          new Dictionary<string, object>(){ { "Path", folder } }
+                          new Dictionary<string, object>(){ { Constants.Configuration.Path, folder } }
                         );
 
       var lastModified = new DirectoryInfo(path).GetDirectories("*", SearchOption.AllDirectories)
                               .OrderByDescending(d => d.LastWriteTimeUtc)
+                              .Select(d => d.LastWriteTimeUtc)
                               .FirstOrDefault();
 
       var fileSizes = Directory.EnumerateFiles(path, "*.*", SearchOption.AllDirectories)
-                        .AsParallel()
-                        .Select(size => {
+                        //.AsParallel()
+                        .Select(file => {
                           try
                           {
-                            return FileSystem.GetFileSizeInMb(FileSystem.GetFileInfo(path));
+                            var size = FileSystem.GetFileInfo(file).Length;
+                            return size;
                           }
                           catch (Exception ex)
                           {
@@ -48,13 +58,13 @@ namespace TWIConnect.Client.Utilities
 
       return new Dictionary<string, object>()
       {
-        { "Path",  path },
-        { "FolderSize", fileSizes.Sum() },
-        { "Modified", lastModified },
-        { "SubFoldersCount", subFolders.Count() },
-        { "SubFolders", subFolders },
-        { "FilesCount", files.Count() },
-        { "Files", files }
+        { Constants.Configuration.Path,  path },
+        { Constants.Configuration.FolderSize, fileSizes.Sum() },
+        { Constants.Configuration.Modified, lastModified },
+        { Constants.Configuration.SubFoldersCount, subFolders.Count() },
+        { Constants.Configuration.SubFolders, subFolders },
+        { Constants.Configuration.FilesCount, files.Count() },
+        { Constants.Configuration.Files, files }
       };
     }
 
@@ -63,7 +73,7 @@ namespace TWIConnect.Client.Utilities
       System.IO.FileInfo fileInfo = Utilities.FileSystem.GetFileInfo(path);
 
       //Check size limit if applicable
-      int sizeMb = Utilities.FileSystem.GetFileSizeInMb(fileInfo);
+      var sizeMb = Utilities.FileSystem.GetFileSizeInMb(fileInfo);
 
       if (
           (!configuration.IgnoreSizeLimit) &&
@@ -111,10 +121,10 @@ namespace TWIConnect.Client.Utilities
       //Load file content
       var file = new Dictionary<string, object>
       {
-        { "FileContent", Utilities.FileSystem.ReadFileAsBase64String(path) },
-        { "Path", path },
-        { "FileSize", fileInfo.Length },
-        { "Modified", fileInfo.LastAccessTimeUtc }
+        { Constants.Configuration.FileContent, Utilities.FileSystem.ReadFileAsBase64String(path) },
+        { Constants.Configuration.Path, path },
+        { Constants.Configuration.FileSize, fileInfo.Length },
+        { Constants.Configuration.Modified, fileInfo.LastAccessTimeUtc }
       };
 
       return file;
@@ -126,9 +136,9 @@ namespace TWIConnect.Client.Utilities
       return (filePath.Contains(backSlash)) ? filePath : AppDomain.CurrentDomain.BaseDirectory + filePath;
     }
 
-    public static int GetFileSizeInMb(System.IO.FileInfo fileInfo)
+    public static double GetFileSizeInMb(System.IO.FileInfo fileInfo)
     {
-      return (int)(fileInfo.Length / 1048576);
+      return fileInfo.Length / 1048576;
     }
 
     public static string ReadTextFile(string filePath)
@@ -180,9 +190,7 @@ namespace TWIConnect.Client.Utilities
     public static System.IO.FileInfo GetFileInfo(string filePath)
     {
       System.Diagnostics.Stopwatch stopWatch = System.Diagnostics.Stopwatch.StartNew();
-      Utilities.Logger.Log(NLog.LogLevel.Trace, Resources.Messages.StartGettingIOFileInfo, filePath);
       filePath = GetFullFilePath(filePath); 
-      Utilities.Logger.Log(NLog.LogLevel.Trace, Resources.Messages.EndOfExecution, "FileSystem.GetFileInfo", Logger.GetTimeElapsed(stopWatch));
       return new System.IO.FileInfo(filePath);
     }
 

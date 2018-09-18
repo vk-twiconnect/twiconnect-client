@@ -25,21 +25,6 @@ namespace TWIConnect.Client
 
   public class Configuration
   {
-    private const string _configurationFile = ".\\Configuration.json";
-
-    /// {
-    //  "LocationKey": "New Site Install",
-    //  "DerivedMachineHash": "a3d61dcd929f262dc652ffce4ef61231",
-    //  "ScheduledIntervalSec": "15",
-    //  "FileSizeLimitMb": "501",
-    //  "ImmutabilityIntervalSec": "2",
-    //  "ThreadTimeToLiveSec": "5",
-    //  "SequenceId": "1397608612",
-    //  "Uri": "http://transactionalweb.com/ienterprise/pollrequest.htm",
-    //  "IgnoreSizeLimit": "False",
-    //  "IgnoreImmutabilityInterval": "False",
-    //  "SendVersionAfterTimeStampUtc": "1970-01-01T01:01:40"
-    // }
     public string LocationKey { get; set; }
     public int ScheduledIntervalSec { get; set; }
     public int FileSizeLimitMb { get; set; }
@@ -102,7 +87,7 @@ namespace TWIConnect.Client
       try
       {
         System.Diagnostics.Stopwatch stopWatch = System.Diagnostics.Stopwatch.StartNew();
-        string configurationFilePath = Configuration._configurationFile;
+        string configurationFilePath = Constants.FileNames.ConfigurationFileName;
         Utilities.Logger.Log(NLog.LogLevel.Trace, Resources.Messages.StartReadingLocalConfiguration, configurationFilePath);
         string json = Utilities.FileSystem.ReadTextFile(configurationFilePath);
         Configuration config = Configuration.Load(json);
@@ -200,7 +185,7 @@ namespace TWIConnect.Client
 
         lock (fileLock)
         {
-            Utilities.FileSystem.WriteTextFile(_configurationFile, configToSave.ToString());
+            Utilities.FileSystem.WriteTextFile(Constants.FileNames.ConfigurationFileName, configToSave.ToString());
         }
       }
       catch (Exception ex)
