@@ -2,8 +2,8 @@
 
 * TWI Client is an unattended bot running in the background as a Windows Service to upload files, collect folder meta-data, and to execute shell commands on the client
 * Server side is fully in control of the client behaviour, updating client's configuration and instructing what file/folder to upload or what command to execute 
-* Client provides no user interface for the end-user to configure
-* Server responses with one of the sample responses, no more than one file/folder/command is processed by the client at a time
+* Client provides no user interface for an end-user to configure
+* Server responds with one of the sample responses, no more than one file/folder/command is processed by the client at a time
 
 ## Flow Diagram
 
@@ -28,15 +28,9 @@
   "LocationKey": "New Site Install",
   "DerivedMachineHash": "a3d61dcd929f262dc652ffce4ef61231",
   "ScheduledIntervalSec": "15",
-  "FileSizeLimitMb": "501",
-  "ImmutabilityIntervalSec": "2",
   "ThreadTimeToLiveSec": "5",
   "SequenceId": "1397608612",
-  "ObjectType":  "None",
-  "Uri": "http://transactionalweb.com/ienterprise/pollrequest.htm",
-  "IgnoreSizeLimit": "False",
-  "IgnoreImmutabilityInterval": "False",
-  "SendVersionAfterTimeStampUtc": "1970-01-01T01:01:40"
+  "Uri": "http://transactionalweb.com/ienterprise/pollrequest.htm"
 }
 ```
 
@@ -102,15 +96,10 @@
   "LocationKey": "New Site Install",
   "DerivedMachineHash": "a3d61dcd929f262dc652ffce4ef61231",
   "ScheduledIntervalSec": "15",
-  "FileSizeLimitMb": "501",
-  "ImmutabilityIntervalSec": "2",
   "ThreadTimeToLiveSec": "5",
   "SequenceId": "1397608612",
   "ObjectType":  "None",
-  "Uri": "http://transactionalweb.com/ienterprise/pollrequest.htm",
-  "IgnoreSizeLimit": "False",
-  "IgnoreImmutabilityInterval": "False",
-  "SendVersionAfterTimeStampUtc": "1970-01-01T01:01:40"
+  "Uri": "http://transactionalweb.com/ienterprise/pollrequest.htm"
 }
 ```
 
@@ -123,6 +112,9 @@
   "ObjectType":  "File",
   "SequenceId": "1397608612",
   "Uri": "http://transactionalweb.com/ienterprise/pollrequest.htm",
+  "ThreadTimeToLiveSec": "5",
+  "ImmutabilityIntervalSec": "2",
+  "FileSizeLimitMb": "501",
   "IgnoreSizeLimit": "False",
   "IgnoreImmutabilityInterval": "False",
   "SendVersionAfterTimeStampUtc": "1970-01-01T01:01:40",
@@ -139,6 +131,7 @@
   "ObjectType":  "Folder",
   "SequenceId": "1397608612",
   "Uri": "http://transactionalweb.com/ienterprise/pollrequest.htm",
+  "ThreadTimeToLiveSec": "5",
   "Path": "C:\\Temp"
 }
 ```
@@ -152,10 +145,10 @@
   "SequenceId": "1397608612",
   "ObjectType":  "Command",
   "Uri": "http://transactionalweb.com/ienterprise/pollrequest.htm",
+  "ThreadTimeToLiveSec": "5",
   "CommandLine": "dir C:"
 }
 ```
-* ThreadTimeToLive settings will limit command line execution
 
 
 ## Development Setup
