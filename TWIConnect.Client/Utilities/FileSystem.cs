@@ -15,13 +15,6 @@ namespace TWIConnect.Client.Utilities
       bool isFolder = FileSystem.IsDirectory(path);
       var info = isFolder? LoadFolderMetaData(configuration, path) : LoadFile(configuration, path);
       info.Add(Constants.Configuration.ObjectType, isFolder? Constants.ObjectType.Folder: Constants.ObjectType.File);
-
-      #region Move out!
-        info.Add(Constants.Configuration.LocationKey, configuration.LocationKey);
-        info.Add(Constants.Configuration.DerivedMachineHash, configuration.DerivedMachineHash);
-        info.Add(Constants.Configuration.SequenceId, configuration.SequenceId);
-      #endregion
-
       return info;
     }
 

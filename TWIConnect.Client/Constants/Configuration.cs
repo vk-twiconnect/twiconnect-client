@@ -20,5 +20,6 @@ namespace TWIConnect.Client.Constants
     public const string FilesCount = "FilesCount";
     public const string Files = "Files";
     public const string FileSize = "FileSize";
+    public const string Uri = "Uri";
   }
 }

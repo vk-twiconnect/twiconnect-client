@@ -10,5 +10,6 @@ namespace TWIConnect.Client.Constants
     public const string None = "None";
     public const string File = "File";
     public const string Folder = "Folder";
+    public const string Command = "Command";
   }
 }

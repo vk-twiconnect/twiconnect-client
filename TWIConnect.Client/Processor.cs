@@ -140,3 +140,86 @@
 //        }
 //    }
 //}
+
+using Newtonsoft.Json.Linq;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Net;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace TWIConnect.Client
+{
+  public static class Processor
+  {
+    public static void Run()
+    {
+      try
+      {
+        Utilities.Logger.Log(Resources.Messages.ProcessStarted);
+        System.Diagnostics.Stopwatch stopWatch = System.Diagnostics.Stopwatch.StartNew();
+
+        var configuration = Configuration.Load();
+
+        //Start on separate thread to ensure process does not gets stack but rather thread is aborted
+        Utilities.Threading.AsyncCallWithTimeout
+        (
+          () => Processor.Run(configuration),
+          (int)(configuration.ThreadTimeToLiveSec * 1000)
+        );
+        Utilities.Logger.Log(Resources.Messages.ProcessSucceeded, Utilities.Logger.GetTimeElapsed(stopWatch));
+      }
+      catch
+      {
+        Utilities.Logger.Log(Resources.Messages.ProcessFailed);
+        //No action, just quit
+      }
+    }
+
+    public static void Run(Configuration configuration)
+    {
+      var response = RestClient.PostJson<JObject>(configuration.Uri, configuration);
+      var responseDictionary = response.ToObject<IDictionary<string, object>>();
+      string objectType = (string)responseDictionary[Constants.Configuration.ObjectType];
+
+      while (string.Compare(objectType, Constants.ObjectType.None, StringComparison.InvariantCultureIgnoreCase) == 0)
+      {
+        switch(objectType)
+        {
+          case Constants.ObjectType.Command:
+            throw new NotImplementedException();
+
+          case Constants.ObjectType.File:
+          case Constants.ObjectType.Folder:
+            var info = Processor.LoadFileFolderInfo(configuration, responseDictionary);
+            responseDictionary = Processor.PostFileFolderInfo(responseDictionary, info);
+            break;
+        }
+      }
+
+      configuration.Update(Configuration.Load(response));
+      configuration.Save();
+    }
+
+    public static IDictionary<string, object> LoadFileFolderInfo(Configuration configuration, IDictionary<string, object> responseDictionary)
+    {
+      var info = Utilities.FileSystem.Load(configuration, (string)responseDictionary[Constants.Configuration.Path]);
+      info.Add(Constants.Configuration.LocationKey, configuration.LocationKey);
+      info.Add(Constants.Configuration.DerivedMachineHash, configuration.DerivedMachineHash);
+      info.Add(Constants.Configuration.SequenceId, configuration.SequenceId);
+      return info;
+    }
+
+    public static IDictionary<string, object> PostFileFolderInfo(
+      IDictionary<string, object> config,
+      IDictionary<string, object> fileFolderInfo
+    )
+    {
+      var response = RestClient.PostJson<JObject>((string)config[Constants.Configuration.Uri], fileFolderInfo);
+      var responseDictionary = response.ToObject<Dictionary<string, object>>();
+      return responseDictionary;
+    }
+  }
+}

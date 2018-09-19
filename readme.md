@@ -151,7 +151,7 @@
   "DerivedMachineHash": "a3d61dcd929f262dc652ffce4ef61231",
   "SequenceId": "1397608612",
   "ObjectType":  "Command",
-  "UrlPostFile": "http://transactionalweb.com/ienterprise/pollrequest.htm",
+  "Uri": "http://transactionalweb.com/ienterprise/pollrequest.htm",
   "CommandLine": "dir C:"
 }
 ```

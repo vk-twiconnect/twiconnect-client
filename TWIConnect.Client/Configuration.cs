@@ -10,19 +10,10 @@ using System.Management;
 using Newtonsoft.Json;
 
 using TWIConnect.Client.Utilities;
-
+using Newtonsoft.Json.Linq;
 
 namespace TWIConnect.Client
 {
-  public enum ObjectType
-  {
-      Unknown = 0,
-      None = 1,
-      File = 2,
-      Folder = 3,
-      Command = 4
-  }
-
   public class Configuration
   {
     public string LocationKey { get; set; }
@@ -108,6 +99,15 @@ namespace TWIConnect.Client
     public static Configuration Load(string json)
     {
       return JsonConvert.DeserializeObject<Configuration>(json);
+    }
+
+    /// <summary>
+    /// Load Configuration from Json Token
+    /// </summary>
+    /// <returns></returns>
+    public static Configuration Load(JToken jtoken)
+    {
+      return jtoken.ToObject<Configuration>();
     }
 
     /// <summary>

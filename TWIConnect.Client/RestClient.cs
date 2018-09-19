@@ -6,98 +6,33 @@ using System.Net;
 using System.IO;
 using TWIConnect.Client.Utilities;
 using System.Net.Security;
+using System.Net.Http;
+using System.Threading.Tasks;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace TWIConnect.Client
 {
-    internal class RestClient
+  public static class RestClient
+  {
+    public static T PostJson<T>(string uri, object body)
     {
-        internal RestClient(Configuration configuration)
-        {
-            Configuration = configuration;
-        }
+      System.Diagnostics.Stopwatch stopWatch = System.Diagnostics.Stopwatch.StartNew();
+      Utilities.Logger.Log(NLog.LogLevel.Trace, Resources.Messages.StartClientRequest, uri, JsonConvert.SerializeObject(body));
 
-        private Configuration Configuration {get;set;}
+      var requestJObject = JObject.FromObject(body);
+      using (var http = new HttpClient())
+      {
+        //Disable certs validation hack!
+        ServicePointManager.ServerCertificateValidationCallback = new RemoteCertificateValidationCallback(delegate { return true; });
 
-        private WebRequest CreateRequest(string url, string method = Constants.Protocol.MethodPost, string contentType = Constants.Protocol.ContentTypeForm)
-        {
-            ServicePointManager.ServerCertificateValidationCallback = new RemoteCertificateValidationCallback ( delegate { return true; } );
+        var response = (http.PostAsJsonAsync(uri, requestJObject)).Result;
+        response.EnsureSuccessStatusCode();
+        var responseBody = response.Content.ReadAsAsync<T>().Result;
 
-            WebRequest request = WebRequest.Create(url);
-            request.Method = method;
-            request.ContentType = contentType;
-            return request;
-        }
-
-        private string PostRequest(string url, string content)
-        {
-            using (MemoryStream memoryStream = new MemoryStream())
-            {
-                System.Diagnostics.Stopwatch stopWatch = System.Diagnostics.Stopwatch.StartNew();
-                Utilities.Logger.Log(NLog.LogLevel.Trace, Resources.Messages.StartClientRequest, url, content);
-
-                string payLoad = Constants.Protocol.FormFieldContent + "=" + content;
-                byte[] payloadBin = Encoding.UTF8.GetBytes(payLoad);
-
-                WebRequest request = this.CreateRequest(url);
-                
-                request.GetRequestStream().Write(payloadBin, 0, payloadBin.Length);
-
-                request.GetResponse().GetResponseStream().CopyTo(memoryStream);
-
-                string response = Encoding.UTF8.GetString(memoryStream.ToArray());
-                Utilities.Logger.Log(NLog.LogLevel.Trace, Resources.Messages.EndOfExecution, "RestClient.PostRequest", Logger.GetTimeElapsed(stopWatch));
-
-                return response;
-            }
-        }
-
-        //private T ParseResponse<T>(string response)
-        //{
-        //    try
-        //    {
-        //        T configurationResponse = response.Deserialize<T>();
-        //        return configurationResponse;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Utilities.Logger.Log(NLog.LogLevel.Error, Resources.Messages.FailureDeserializingResponse, response ?? string.Empty);
-        //        throw ex;
-        //    }
-        //}
-
-        //internal ConfigurationResponse GetRemoteConfiguration(ConfigurationRequest configurationRequest)
-        //{
-        //    string response = this.PostRequest(this.Configuration.Uri, configurationRequest.Serialize());
-        //    return ParseResponse<ConfigurationResponse>(response);
-        //}
-
-        //internal ConfigurationResponse UploadFile(PostFileRequest fileRequest)
-        //{
-        //    string response = string.Empty;
-
-        //    try
-        //    {
-        //        string content = fileRequest.Serialize();
-        //        System.Diagnostics.Stopwatch stopWatch = System.Diagnostics.Stopwatch.StartNew();
-        //        Utilities.Logger.Log(NLog.LogLevel.Trace, Resources.Messages.StartUploadFile, this.Configuration.Uri, content);
-        //        response = this.PostRequest(this.Configuration.Uri, content);
-        //        Utilities.Logger.Log(NLog.LogLevel.Trace, Resources.Messages.EndOfExecution, "RestClient.UploadFile", Logger.GetTimeElapsed(stopWatch));
-        //        Utilities.Logger.Log(NLog.LogLevel.Trace, "RestClient.UploadFile Response: " + response);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Utilities.Logger.Log(NLog.LogLevel.Error, Resources.Messages.FailurePostingFile, fileRequest.Name);
-        //        throw ex;
-        //    }
-
-        //    return this.ParseResponse<ConfigurationResponse>(response);
-        //}
-
-        //internal ConfigurationResponse SelectFile(SelectFileRequest request)
-        //{
-        //    string response = this.PostRequest(this.Configuration.Uri, request.Serialize());
-        //    return ParseResponse<ConfigurationResponse>(response);
-        //}
-
+        Utilities.Logger.Log(NLog.LogLevel.Trace, Resources.Messages.EndOfExecution, "RestClient.PostJson", Logger.GetTimeElapsed(stopWatch));
+        return responseBody;
+      }
     }
+  }
 }
