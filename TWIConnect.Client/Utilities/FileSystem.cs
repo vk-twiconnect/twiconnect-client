@@ -11,49 +11,50 @@ namespace TWIConnect.Client.Utilities
   {
 
 
-    //public static IDictionary<string, object> LoadFolderMetaData(FolderConfiguration configuration, string path)
-    //{
-    //  var files = Directory.EnumerateFiles(path, "*.*", SearchOption.TopDirectoryOnly).Select(
-    //                    file => new Dictionary<string, object>() {
-    //                      { Constants.Configuration.Path, file }
-    //                    }
-    //                  );
-    //  var subFolders = Directory.EnumerateDirectories(path, "*", SearchOption.TopDirectoryOnly).Select(folder => 
-    //                      new Dictionary<string, object>(){ { Constants.Configuration.Path, folder } }
-    //                    );
+    public static IDictionary<string, object> LoadFolderMetaData(FolderConfiguration configuration)
+    {
+      var files = Directory.EnumerateFiles(configuration.Path, "*.*", SearchOption.TopDirectoryOnly).Select(
+                        file => new Dictionary<string, object>() {
+                          { Constants.Configuration.Path, file }
+                        }
+                      );
+      var subFolders = Directory.EnumerateDirectories(configuration.Path, "*", SearchOption.TopDirectoryOnly).Select(folder =>
+                          new Dictionary<string, object>() { { Constants.Configuration.Path, folder } }
+                        );
 
-    //  var lastModified = new DirectoryInfo(path).GetDirectories("*", SearchOption.AllDirectories)
-    //                          .OrderByDescending(d => d.LastWriteTimeUtc)
-    //                          .Select(d => d.LastWriteTimeUtc)
-    //                          .FirstOrDefault();
+      var lastModified = new DirectoryInfo(configuration.Path).GetDirectories("*", SearchOption.AllDirectories)
+                              .OrderByDescending(d => d.LastWriteTimeUtc)
+                              .Select(d => d.LastWriteTimeUtc)
+                              .FirstOrDefault();
 
-    //  var fileSizes = Directory.EnumerateFiles(path, "*.*", SearchOption.AllDirectories)
-    //                    //.AsParallel()
-    //                    .Select(file => {
-    //                      try
-    //                      {
-    //                        var size = FileSystem.GetFileInfo(file).Length;
-    //                        return size;
-    //                      }
-    //                      catch (Exception ex)
-    //                      {
-    //                        Utilities.Logger.Log(ex);
-    //                        return 0.0;
-    //                      }
-    //                    });
+      var fileSizes = Directory.EnumerateFiles(configuration.Path, "*.*", SearchOption.AllDirectories)
+                        //.AsParallel()
+                        .Select(file =>
+                        {
+                          try
+                          {
+                            var size = FileSystem.GetFileInfo(file).Length;
+                            return size;
+                          }
+                          catch (Exception ex)
+                          {
+                            Utilities.Logger.Log(ex);
+                            return 0.0;
+                          }
+                        });
 
-    //  return new Dictionary<string, object>()
-    //  {
-    //    { Constants.Configuration.ObjectType, Constants.ObjectType.Folder },
-    //    { Constants.Configuration.Path, path },
-    //    { Constants.Configuration.FolderSize, fileSizes.Sum() },
-    //    { Constants.Configuration.Modified, lastModified },
-    //    { Constants.Configuration.SubFoldersCount, subFolders.Count() },
-    //    { Constants.Configuration.SubFolders, subFolders },
-    //    { Constants.Configuration.FilesCount, files.Count() },
-    //    { Constants.Configuration.Files, files }
-    //  };
-    //}
+      return new Dictionary<string, object>()
+      {
+        { Constants.Configuration.ObjectType, Constants.ObjectType.Folder },
+        { Constants.Configuration.Path, configuration.Path },
+        { Constants.Configuration.FolderSize, fileSizes.Sum() },
+        { Constants.Configuration.Modified, lastModified },
+        { Constants.Configuration.SubFoldersCount, subFolders.Count() },
+        { Constants.Configuration.SubFolders, subFolders },
+        { Constants.Configuration.FilesCount, files.Count() },
+        { Constants.Configuration.Files, files }
+      };
+    }
 
     public static IDictionary<string, object> LoadFile(FileConfiguration configuration)
     {
@@ -185,6 +186,14 @@ namespace TWIConnect.Client.Utilities
     public static bool IsDirectory(string path)
     {
       return System.IO.Directory.Exists(path);
+    }
+
+    public static T LoadObjectFromFile<T>(string path)
+    {
+      var json = Utilities.FileSystem.ReadTextFile(path);
+      var jObject = Newtonsoft.Json.Linq.JObject.Parse(json);
+      var result = jObject.ToObject<T>();
+      return result;
     }
   }
 }

@@ -17,10 +17,7 @@ namespace TWIConnect.Client
 
     public static FileConfiguration FromFile(string path)
     {
-      var json = Utilities.FileSystem.ReadTextFile(path);
-      var jObject = JObject.Parse(json);
-      var fileConfiguration = jObject.ToObject<FileConfiguration>();
-      return fileConfiguration;
+      return Utilities.FileSystem.LoadObjectFromFile<FileConfiguration>(path);
     }
 
     public const string ObjectType = Constants.ObjectType.File;
