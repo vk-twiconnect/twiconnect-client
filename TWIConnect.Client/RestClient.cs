@@ -20,18 +20,29 @@ namespace TWIConnect.Client
       System.Diagnostics.Stopwatch stopWatch = System.Diagnostics.Stopwatch.StartNew();
       Utilities.Logger.Log(NLog.LogLevel.Trace, Resources.Messages.StartClientRequest, uri, JsonConvert.SerializeObject(body));
 
-      var requestJObject = JObject.FromObject(body);
+      var requestJson = JObject.FromObject(body).ToString();
+      var resquestContent = new StringContent(requestJson);
+
       using (var http = new HttpClient())
       {
         //Disable certs validation hack!
         ServicePointManager.ServerCertificateValidationCallback = new RemoteCertificateValidationCallback(delegate { return true; });
 
-        var response = (http.PostAsJsonAsync(uri, requestJObject)).Result;
-        response.EnsureSuccessStatusCode();
-        var responseBody = response.Content.ReadAsAsync<T>().Result;
+        //Post request
+        var response = http.PostAsync(uri, resquestContent).Result;
 
+        //Validate 200 response code
+        response.EnsureSuccessStatusCode();
+
+        //Parse the response
+        var responseContent = response.Content.ReadAsStringAsync().Result;
+        var responseObject = JsonConvert.DeserializeObject<T>(responseContent);
+
+        //Log perfromance
         Utilities.Logger.Log(NLog.LogLevel.Trace, Resources.Messages.EndOfExecution, "RestClient.PostJson", Logger.GetTimeElapsed(stopWatch));
-        return responseBody;
+
+        //Return parsed object
+        return responseObject;
       }
     }
   }

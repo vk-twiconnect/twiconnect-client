@@ -18,15 +18,9 @@ namespace TWIConnect.Client
   {
     public string LocationKey { get; set; }
     public int ScheduledIntervalSec { get; set; }
-    public int FileSizeLimitMb { get; set; }
-    public int ImmutabilityIntervalSec { get; set; }
     public int ThreadTimeToLiveSec { get; set; }
     public string SequenceId { get; set; }
-    
     public string Uri { get; set; }
-    public bool IgnoreSizeLimit { get; set; }
-    public bool IgnoreImmutabilityInterval { get; set; }
-    public DateTime? SendVersionAfterTimeStampUtc { get; set; }
 
     private string derivedMachineHash = null;
     public string DerivedMachineHash
@@ -136,8 +130,8 @@ namespace TWIConnect.Client
         public DateTime SendVersionAfterTimeStampUtc { get; set; }
         */
         this.LocationKey = SelectValue<string>(newConfiguration.LocationKey, this.LocationKey);
-        this.FileSizeLimitMb = SelectValue<int?>(newConfiguration.FileSizeLimitMb, (int?)this.FileSizeLimitMb).Value;
-        this.ImmutabilityIntervalSec = SelectValue<int?>(newConfiguration.ImmutabilityIntervalSec, (int?)this.ImmutabilityIntervalSec).Value;
+        //this.FileSizeLimitMb = SelectValue<int?>(newConfiguration.FileSizeLimitMb, (int?)this.FileSizeLimitMb).Value;
+        //this.ImmutabilityIntervalSec = SelectValue<int?>(newConfiguration.ImmutabilityIntervalSec, (int?)this.ImmutabilityIntervalSec).Value;
         this.ThreadTimeToLiveSec = SelectValue<int?>(newConfiguration.ThreadTimeToLiveSec, (int?)this.ThreadTimeToLiveSec).Value;
         this.SequenceId = SelectValue<string>(newConfiguration.SequenceId, this.SequenceId);
         this.Uri = SelectValue<string>(newConfiguration.Uri, this.Uri);

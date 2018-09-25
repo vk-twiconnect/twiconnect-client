@@ -10,60 +10,54 @@ namespace TWIConnect.Client.Utilities
   public class FileSystem
   {
 
-    public static IDictionary<string, object> Load(Configuration configuration, string path)
+
+    //public static IDictionary<string, object> LoadFolderMetaData(FolderConfiguration configuration, string path)
+    //{
+    //  var files = Directory.EnumerateFiles(path, "*.*", SearchOption.TopDirectoryOnly).Select(
+    //                    file => new Dictionary<string, object>() {
+    //                      { Constants.Configuration.Path, file }
+    //                    }
+    //                  );
+    //  var subFolders = Directory.EnumerateDirectories(path, "*", SearchOption.TopDirectoryOnly).Select(folder => 
+    //                      new Dictionary<string, object>(){ { Constants.Configuration.Path, folder } }
+    //                    );
+
+    //  var lastModified = new DirectoryInfo(path).GetDirectories("*", SearchOption.AllDirectories)
+    //                          .OrderByDescending(d => d.LastWriteTimeUtc)
+    //                          .Select(d => d.LastWriteTimeUtc)
+    //                          .FirstOrDefault();
+
+    //  var fileSizes = Directory.EnumerateFiles(path, "*.*", SearchOption.AllDirectories)
+    //                    //.AsParallel()
+    //                    .Select(file => {
+    //                      try
+    //                      {
+    //                        var size = FileSystem.GetFileInfo(file).Length;
+    //                        return size;
+    //                      }
+    //                      catch (Exception ex)
+    //                      {
+    //                        Utilities.Logger.Log(ex);
+    //                        return 0.0;
+    //                      }
+    //                    });
+
+    //  return new Dictionary<string, object>()
+    //  {
+    //    { Constants.Configuration.ObjectType, Constants.ObjectType.Folder },
+    //    { Constants.Configuration.Path, path },
+    //    { Constants.Configuration.FolderSize, fileSizes.Sum() },
+    //    { Constants.Configuration.Modified, lastModified },
+    //    { Constants.Configuration.SubFoldersCount, subFolders.Count() },
+    //    { Constants.Configuration.SubFolders, subFolders },
+    //    { Constants.Configuration.FilesCount, files.Count() },
+    //    { Constants.Configuration.Files, files }
+    //  };
+    //}
+
+    public static IDictionary<string, object> LoadFile(FileConfiguration configuration)
     {
-      bool isFolder = FileSystem.IsDirectory(path);
-      var info = isFolder? LoadFolderMetaData(configuration, path) : LoadFile(configuration, path);
-      info.Add(Constants.Configuration.ObjectType, isFolder? Constants.ObjectType.Folder: Constants.ObjectType.File);
-      return info;
-    }
-
-    public static IDictionary<string, object> LoadFolderMetaData(Configuration configuration, string path)
-    {
-      var files = Directory.EnumerateFiles(path, "*.*", SearchOption.TopDirectoryOnly).Select(
-                        file => new Dictionary<string, object>() {
-                          { Constants.Configuration.Path, file }
-                        }
-                      );
-      var subFolders = Directory.EnumerateDirectories(path, "*", SearchOption.TopDirectoryOnly).Select(folder => 
-                          new Dictionary<string, object>(){ { Constants.Configuration.Path, folder } }
-                        );
-
-      var lastModified = new DirectoryInfo(path).GetDirectories("*", SearchOption.AllDirectories)
-                              .OrderByDescending(d => d.LastWriteTimeUtc)
-                              .Select(d => d.LastWriteTimeUtc)
-                              .FirstOrDefault();
-
-      var fileSizes = Directory.EnumerateFiles(path, "*.*", SearchOption.AllDirectories)
-                        //.AsParallel()
-                        .Select(file => {
-                          try
-                          {
-                            var size = FileSystem.GetFileInfo(file).Length;
-                            return size;
-                          }
-                          catch (Exception ex)
-                          {
-                            Utilities.Logger.Log(ex);
-                            return 0.0;
-                          }
-                        });
-
-      return new Dictionary<string, object>()
-      {
-        { Constants.Configuration.Path,  path },
-        { Constants.Configuration.FolderSize, fileSizes.Sum() },
-        { Constants.Configuration.Modified, lastModified },
-        { Constants.Configuration.SubFoldersCount, subFolders.Count() },
-        { Constants.Configuration.SubFolders, subFolders },
-        { Constants.Configuration.FilesCount, files.Count() },
-        { Constants.Configuration.Files, files }
-      };
-    }
-
-    public static IDictionary<string, object> LoadFile(Configuration configuration, string path)
-    {
-      System.IO.FileInfo fileInfo = Utilities.FileSystem.GetFileInfo(path);
+      System.IO.FileInfo fileInfo = Utilities.FileSystem.GetFileInfo(configuration.Path);
 
       //Check size limit if applicable
       var sizeMb = Utilities.FileSystem.GetFileSizeInMb(fileInfo);
@@ -73,7 +67,7 @@ namespace TWIConnect.Client.Utilities
           (sizeMb > configuration.FileSizeLimitMb)
          )
       {
-        throw new Exception(string.Format(Resources.Messages.FileSizeExceeded, path, sizeMb, configuration.FileSizeLimitMb));
+        throw new Exception(string.Format(Resources.Messages.FileSizeExceeded, configuration.Path, sizeMb, configuration.FileSizeLimitMb));
       }
 
       //Check immutability interval if applicable
@@ -87,7 +81,7 @@ namespace TWIConnect.Client.Utilities
         throw new Exception(
           string.Format(
             Resources.Messages.FileImmutabilityIntervalNotReached,
-            path,
+            configuration.Path,
             immutabilitySec,
             configuration.ImmutabilityIntervalSec
           )
@@ -104,7 +98,7 @@ namespace TWIConnect.Client.Utilities
         throw new Exception(
           string.Format(
             Resources.Messages.SendVersionAfterTimeStampUtcNotReached,
-            path,
+            configuration.Path,
             fileInfo.LastWriteTimeUtc,
             configuration.SendVersionAfterTimeStampUtc
           )
@@ -114,8 +108,9 @@ namespace TWIConnect.Client.Utilities
       //Load file content
       var file = new Dictionary<string, object>
       {
-        { Constants.Configuration.FileContent, Utilities.FileSystem.ReadFileAsBase64String(path) },
-        { Constants.Configuration.Path, path },
+        { Constants.Configuration.ObjectType, Constants.ObjectType.File },
+        { Constants.Configuration.FileContent, Utilities.FileSystem.ReadFileAsBase64String(configuration.Path) },
+        { Constants.Configuration.Path, configuration.Path },
         { Constants.Configuration.FileSize, fileInfo.Length },
         { Constants.Configuration.Modified, fileInfo.LastAccessTimeUtc }
       };
