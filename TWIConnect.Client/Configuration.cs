@@ -121,17 +121,7 @@ namespace TWIConnect.Client
     {
       if (newConfiguration != null)
       {
-        /*
-
-        public ObjectType ObjectType { get; set;  }
-        public string Uri { get; set; }
-        public bool IgnoreSizeLimit { get; set; }
-        public bool IgnoreImmutabilityInterval { get; set; }
-        public DateTime SendVersionAfterTimeStampUtc { get; set; }
-        */
         this.LocationKey = SelectValue<string>(newConfiguration.LocationKey, this.LocationKey);
-        //this.FileSizeLimitMb = SelectValue<int?>(newConfiguration.FileSizeLimitMb, (int?)this.FileSizeLimitMb).Value;
-        //this.ImmutabilityIntervalSec = SelectValue<int?>(newConfiguration.ImmutabilityIntervalSec, (int?)this.ImmutabilityIntervalSec).Value;
         this.ThreadTimeToLiveSec = SelectValue<int?>(newConfiguration.ThreadTimeToLiveSec, (int?)this.ThreadTimeToLiveSec).Value;
         this.SequenceId = SelectValue<string>(newConfiguration.SequenceId, this.SequenceId);
         this.Uri = SelectValue<string>(newConfiguration.Uri, this.Uri);

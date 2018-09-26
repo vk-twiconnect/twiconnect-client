@@ -21,5 +21,9 @@ namespace TWIConnect.Client.Constants
     public const string Files = "Files";
     public const string FileSize = "FileSize";
     public const string Uri = "Uri";
+    public const string CommandLine = "CommandLine";
+    public const string CommandArguments = "CommandArguments";
+    public const string CommandExitCode = "CommandExitCode";
+    public const string CommandOutput = "CommandOutput";
   }
 }

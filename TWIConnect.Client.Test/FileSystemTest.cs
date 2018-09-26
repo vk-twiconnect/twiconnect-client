@@ -16,9 +16,6 @@ namespace TWIConnect.Client.Test
       var info = Utilities.FileSystem.LoadFile(config);
       Assert.AreEqual(config.Path, info[Constants.Configuration.Path]);
       Assert.IsNotNull(info[Constants.Configuration.FileContent]);
-      //Assert.AreEqual(config.LocationKey, info[Constants.Configuration.LocationKey]);
-      //Assert.AreEqual(config.DerivedMachineHash, info[Constants.Configuration.DerivedMachineHash]);
-      //Assert.AreEqual(config.SequenceId, info[Constants.Configuration.SequenceId]);
       Assert.AreEqual(Constants.ObjectType.File, info[Constants.Configuration.ObjectType]);
       Assert.IsTrue(((string)info[Constants.Configuration.FileContent]).Length > 0);
       Assert.IsTrue(((long)info[Constants.Configuration.FileSize]) > 0);
@@ -28,20 +25,6 @@ namespace TWIConnect.Client.Test
     [TestMethod]
     public void LoadFolderInfo()
     {
-      //"ObjectType": "Folder",
-      //"FolderSize": "1234578",
-      //"SubFoldersCount": "35",
-      //"FilesCount": "3",
-      //"SubFolders": [
-      //  {"Path": "C:\\Temp\\_1"},
-      //  {"Path": "C:\\Temp\\_2}"
-      //],
-      //"Files": [
-      //  { "Path": "C:\\Temp\\_1\\aa.txt" },
-      //  { "Path": "C:\\Temp\\_2\\bb.tmp" }
-      //],
-      //"Path": "C:\\Temp",
-      //"Modified": "2013-01-01-T00:00:00"
       var config = FolderConfiguration.FromFile("/../../Data/FolderConfiguration.json");
       var info = Utilities.FileSystem.LoadFolderMetaData(config);
 

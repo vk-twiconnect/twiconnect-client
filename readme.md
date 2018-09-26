@@ -81,7 +81,8 @@
   "DerivedMachineHash": "a3d61dcd929f262dc652ffce4ef61231",
   "SequenceId": "1397608612",
   "ObjectType": "Command",
-  "CommandLine": "dir C:\\"
+  "CommandLine": "powershell.exe",
+  "CommandArguments": "dir c:\\",
   "CommandExitCode": 1,
   "CommandOutput": "long-text"
 }
@@ -146,7 +147,8 @@
   "ObjectType":  "Command",
   "Uri": "http://transactionalweb.com/ienterprise/pollrequest.htm",
   "ThreadTimeToLiveSec": "5",
-  "CommandLine": "dir C:"
+  "CommandLine": "powershell.exe"
+  "CommandArguments": "dir c:\\"
 }
 ```
 
