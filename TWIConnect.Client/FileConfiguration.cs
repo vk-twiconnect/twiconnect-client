@@ -9,11 +9,10 @@ namespace TWIConnect.Client
 {
   public class FileConfiguration : Configuration
   {
-    //public static FileConfiguration FromJToken(JToken jToken)
-    //{
-
-    //  return jToken.ToObject<FileConfiguration>(jToken);
-    //}
+    public static FileConfiguration FromJObject(JObject jObject)
+    {
+      return jObject.ToObject<FileConfiguration>();
+    }
 
     public static FileConfiguration FromFile(string path)
     {

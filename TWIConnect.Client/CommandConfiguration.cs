@@ -9,6 +9,11 @@ namespace TWIConnect.Client
 {
   public class CommandConfiguration : Configuration
   {
+    public static CommandConfiguration FromJObject(JObject jObject)
+    {
+      return jObject.ToObject<CommandConfiguration>();
+    }
+
     public static CommandConfiguration FromFile(string path)
     {
       return Utilities.FileSystem.LoadObjectFromFile<CommandConfiguration>(path);

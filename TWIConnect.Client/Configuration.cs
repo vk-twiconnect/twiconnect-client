@@ -29,10 +29,6 @@ namespace TWIConnect.Client
       set { this.derivedMachineHash = value; }
     }
 
-    /// <summary>
-    /// Derive unique machine hash using cpu ids and mac ids
-    /// </summary>
-    /// <returns></returns>
     private static string GenerateDerivedMachineHash()
       {
         var ids = new List<string>();
@@ -63,10 +59,6 @@ namespace TWIConnect.Client
         return uniqueId;
       }
 
-    /// <summary>
-    /// Load local configuration
-    /// </summary>
-    /// <returns>Configuration</returns>
     public static Configuration Load()
     {
       try
@@ -86,37 +78,21 @@ namespace TWIConnect.Client
       }
     }
 
-    /// <summary>
-    /// Load Configuration from Json string
-    /// </summary>
-    /// <returns></returns>
     public static Configuration Load(string json)
     {
       return JsonConvert.DeserializeObject<Configuration>(json);
     }
 
-    /// <summary>
-    /// Load Configuration from Json Token
-    /// </summary>
-    /// <returns></returns>
     public static Configuration Load(JToken jtoken)
     {
       return jtoken.ToObject<Configuration>();
     }
 
-    /// <summary>
-    /// Serialize to Json
-    /// </summary>
-    /// <returns>String</returns>
     public override string ToString()
     {
       return JsonConvert.SerializeObject(this);
     }
 
-    /// <summary>
-    /// Update local configuration using response from the server
-    /// </summary>
-    /// <param name="newConfiguration"></param>
     public void Update(Configuration newConfiguration)
     {
       if (newConfiguration != null)
@@ -132,13 +108,6 @@ namespace TWIConnect.Client
       }
     }
 
-    /// <summary>
-    /// Update configuration settings using remote configuration response
-    /// </summary>
-    /// <typeparam name="T">Data Type for the property value</typeparam>
-    /// <param name="sourceValue">Local Configuration Value</param>
-    /// <param name="targetValue">Remote Configuration Value</param>
-    /// <returns></returns>
     private T SelectValue<T>(T sourceValue, T targetValue)
     {
       if (typeof(T) == typeof(string))
@@ -156,9 +125,6 @@ namespace TWIConnect.Client
       }
     }
 
-    /// <summary>
-    /// Save configuration file
-    /// </summary>
     internal void Save()
     {
       object fileLock = new object();
@@ -177,6 +143,11 @@ namespace TWIConnect.Client
         Utilities.Logger.Log(ex);
         throw ex;
       }
+    }
+
+    public static Configuration FromJObject(JObject jObject)
+    {
+      return jObject.ToObject<Configuration>();
     }
   }
 }

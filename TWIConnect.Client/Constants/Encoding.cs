@@ -5,11 +5,8 @@ using System.Text;
 
 namespace TWIConnect.Client.Constants
 {
-    struct Protocol
+    struct Encoding
     {
-        internal const string FormFieldContent = "content";
-        internal const string MethodPost = "POST";
-        internal const string ContentTypeForm = "application/x-www-form-urlencoded";
         internal static string[] Base64EncodingRemoveStrings = new string[] { "77u/" };
     }
 }

@@ -28,7 +28,7 @@ namespace TWIConnect.Client.Utilities
                               .FirstOrDefault();
 
       var fileSizes = Directory.EnumerateFiles(configuration.Path, "*.*", SearchOption.AllDirectories)
-                        //.AsParallel()
+                        .AsParallel()
                         .Select(file =>
                         {
                           try

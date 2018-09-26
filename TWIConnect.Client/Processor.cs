@@ -1,143 +1,102 @@
-﻿//using System;
-//using System.Collections.Generic;
-//using System.Diagnostics;
-//using System.Linq;
-//using System.Text;
-//using System.Threading.Tasks;
+﻿using Newtonsoft.Json.Linq;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Net;
+using System.Text;
+using System.Threading.Tasks;
 
-//namespace TWIConnect.Client
-//{
-//  public class Processor
-//  {
-//    private static volatile int _filesProcessed = 0;
-//    private static volatile int _filesUploaded = 0;
+namespace TWIConnect.Client
+{
+  public static class Processor
+  {
+    public static void Run()
+    {
+      Utilities.Logger.Log(Resources.Messages.ProcessStarted);
+      System.Diagnostics.Stopwatch stopWatch = System.Diagnostics.Stopwatch.StartNew();
 
-//    public static void Run(Configuration configuration)
-//    {
-//      try
-//      {
-//        if (configuration == null)
-//          throw new ArgumentNullException("configuration");
+      try
+      {
+        var configuration = Configuration.Load();
 
-//        Utilities.Logger.Log(Resources.Messages.ProcessStarted);
-//        System.Diagnostics.Stopwatch stopWatch = System.Diagnostics.Stopwatch.StartNew();
-//        Processor processor = new Processor();
-//        Processor._filesProcessed = Processor._filesUploaded = 0;
+        #region Send Request & Load Response
+        var response = Utilities.Threading.AsyncCallWithTimeout<JObject>
+        (
+          () => RestClient.PostJson<JObject>(configuration.Uri, configuration),
+          (int)(configuration.ThreadTimeToLiveSec * 1000)
+        );
+        var responseConfig = Configuration.FromJObject(response);
+        string objectType = response.Property(Constants.Configuration.ObjectType).Value.ToString();
+        #endregion
 
-//        //Start on separate thread to ensure process does not gets stack but rather thread is aborted
-//        Utilities.Threading.AsyncCallWithTimeout
-//                (
-//                    () =>
-//                    {
-//                      processor.ProcessFiles(configuration);
-//                      processor.RunCommand(configuration);
-//                    },
-//                    (int)(configuration.Files.Count() * configuration.ThreadTimeToLiveSec * 1000 * 1.1)
-//                );
+        while (string.Compare(objectType, Constants.ObjectType.None, StringComparison.InvariantCultureIgnoreCase) == 0)
+        {
+          IDictionary<string, object> request = null;
 
-//        Utilities.Logger.Log(Resources.Messages.ProcessSucceeded, Utilities.Logger.GetTimeElapsed(stopWatch), Processor._filesProcessed, Processor._filesUploaded);
-//      }
-//      catch
-//      {
-//        Utilities.Logger.Log(Resources.Messages.ProcessFailed);
-//      }
-//    }
+          switch (objectType)
+          {
+            case Constants.ObjectType.Command:
+              var commandConfig = CommandConfiguration.FromJObject(response);
+              request = Utilities.Threading.AsyncCallWithTimeout<IDictionary<string, object>>
+              (
+                () => Utilities.Process.ExecuteCommand(commandConfig),
+                (int)(configuration.ThreadTimeToLiveSec * 1000)
+              );
+              break;
 
-//    private void RunCommand(Configuration configuration)
-//    {
-//      try
-//      {
-//        if (!string.IsNullOrWhiteSpace(configuration.RunCommand))
-//        {
-//          Utilities.Logger.Log("Running commands has been disabled for security reasons: " + configuration.RunCommand);
-//          //Process.Start(configuration.RunCommand, configuration.RunCommandArgs);
-//        }
-//      }
-//      catch (Exception ex)
-//      {
-//        Utilities.Logger.Log(ex.Message);
-//      }
-//    }
+            case Constants.ObjectType.File:
+              var fileConfig = FileConfiguration.FromJObject(response);
+              request = Utilities.Threading.AsyncCallWithTimeout<IDictionary<string, object>>
+              (
+                () => Utilities.FileSystem.LoadFile(fileConfig),
+                (int)(configuration.ThreadTimeToLiveSec * 1000)
+              );
+              break;
 
-//    private void ProcessFiles(Configuration configuration)
-//    {
-//      try
-//      {
-//        //Single threaded processing to support continuous firing of one file at the time
-//        Configuration config = configuration;
+            case Constants.ObjectType.Folder:
+              var folderConfig = FolderConfiguration.FromJObject(response);
+              request = Utilities.Threading.AsyncCallWithTimeout<IDictionary<string, object>>
+              (
+                () => Utilities.FileSystem.LoadFolderMetaData(folderConfig),
+                (int)(configuration.ThreadTimeToLiveSec * 1000)
+              );
+              break;
 
-//        while ((config != null) && (config.Files.Any()))
-//        {
-//          config = this.ProcessFileAsync(configuration, config.Files.First());
-//        }
-//      }
-//      catch (Exception ex)
-//      {
-//        Utilities.Logger.Log(ex.Message);
-//      }
-//    }
+            default:
+              throw new InvalidOperationException("Invalid ObjectType found in the response from the server: '" + objectType + "'");
+          }
 
-//    private Configuration ProcessFileAsync(Configuration configuration, FileSettings fileSettings)
-//    {
-//      try
-//      {
-//        Func<Configuration> operation = new Func<Configuration>(() => ProcessFile(configuration, fileSettings));
-//        return Utilities.Threading.AsyncCallWithTimeout(operation, configuration.ThreadTimeToLiveSec * 1000);
-//      }
-//      catch (Exception ex)
-//      {
-//        Utilities.Logger.Log(ex);
-//        return null;
-//      }
-//    }
+          #region Add Common Request Fields
+          request.Add(Constants.Configuration.LocationKey, configuration.LocationKey);
+          request.Add(Constants.Configuration.DerivedMachineHash, configuration.DerivedMachineHash);
+          request.Add(Constants.Configuration.SequenceId, configuration.SequenceId);
+          #endregion
 
-//    private Configuration ProcessFile(Configuration configuration, FileSettings fileSettings)
-//    {
-//      try
-//      {
-//        var restClient = new RestClient(configuration);
-//        ConfigurationResponse configurationResponse = null;
+          #region Send Request & Load Response
+          response = Utilities.Threading.AsyncCallWithTimeout<JObject>
+          (
+            () => RestClient.PostJson<JObject>((string)responseConfig.Uri, request),
+            (int)(configuration.ThreadTimeToLiveSec * 1000)
+          );
+          responseConfig = Configuration.FromJObject(response);
+          objectType = response.Property(Constants.Configuration.ObjectType).Value.ToString();
+          #endregion
+        }
 
-//        if (Utilities.FileSystem.IsDirectory(fileSettings.Name))
-//        {
-//          var filesNames = Utilities.FileSystem.GetFilesList(fileSettings.Name);
-//          var files = filesNames.Select
-//                              (
-//                                  fi =>
-//                                      new File
-//                                      {
-//                                        Content = null,
-//                                        Name = fi.FullName,
-//                                        SizeBytes = fi.Length,
-//                                        TimeStampUtc = fi.LastWriteTimeUtc,
-//                                      }
-
-//                              );
-
-//          configurationResponse = restClient.SelectFile(new SelectFileRequest(configuration, fileSettings, files));
-//        }
-//        else
-//        {
-
-//          Utilities.Logger.Log(NLog.LogLevel.Trace, Resources.Messages.StartProcessFile, fileSettings.Name, System.Threading.Thread.CurrentThread.ManagedThreadId);
-//          System.Diagnostics.Stopwatch stopWatch = System.Diagnostics.Stopwatch.StartNew();
-//          Processor._filesProcessed++;
-//          File file = File.Load(configuration, fileSettings);
-//          PostFileRequest postFileRequest = new PostFileRequest(configuration, file);
-//          configurationResponse = restClient.UploadFile(postFileRequest);
-//          Processor._filesUploaded++;
-//          Utilities.Logger.Log(NLog.LogLevel.Info, Resources.Messages.FileUploaded, fileSettings.Name, Utilities.Logger.GetTimeElapsed(stopWatch));
-//        }
-
-//        configuration.UpdateLocalConfiguration(configurationResponse);
-//        return configuration;
-
-//      }
-//      catch (Exception ex)
-//      {
-//        Utilities.Logger.Log(ex);
-//        return null;
-//      }
-//    }
-//  }
-//}
+        Utilities.Threading.AsyncCallWithTimeout
+        (
+          () => responseConfig.Save(),
+          (int)(responseConfig.ThreadTimeToLiveSec * 1000)
+        );
+        
+        Utilities.Logger.Log(Resources.Messages.ProcessSucceeded, Utilities.Logger.GetTimeElapsed(stopWatch));
+      }
+      catch (Exception ex)
+      {
+        Utilities.Logger.Log(Resources.Messages.ProcessFailed);
+        //No action - just quit
+      }
+    }
+  }
+}

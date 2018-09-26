@@ -20,7 +20,7 @@ namespace TWIConnect.Client.Utilities
     public static string ToBase64String(this byte[] buffer)
     {
       string output = System.Convert.ToBase64String(buffer);
-      foreach (string stringToRemove in Constants.Protocol.Base64EncodingRemoveStrings)
+      foreach (string stringToRemove in Constants.Encoding.Base64EncodingRemoveStrings)
       {
         output = output.Replace(stringToRemove, string.Empty);
       }

@@ -15,5 +15,10 @@ namespace TWIConnect.Client
     }
 
     public string Path { get; set; }
+
+    internal static FolderConfiguration FromJObject(JObject jObject)
+    {
+      return jObject.ToObject<FolderConfiguration>();
+    }
   }
 }
