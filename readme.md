@@ -88,6 +88,8 @@
 }
 ```
 
+**Note:** do not use `cmd.exe`, it tends to hang on completion.
+
 ## Server Responses
 
 ### Update Configuration Only
@@ -151,7 +153,6 @@
   "CommandArguments": "dir c:\\"
 }
 ```
-
 
 ## Development Setup
 
