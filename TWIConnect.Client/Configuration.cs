@@ -78,7 +78,14 @@ namespace TWIConnect.Client
       }
     }
 
-    public static Configuration Load(string json)
+    public static Configuration FromFile(string path)
+    {
+      var json = Utilities.FileSystem.ReadTextFile(path);
+      var config = Configuration.FromJson(json);
+      return config;
+    }
+
+    public static Configuration FromJson(string json)
     {
       return JsonConvert.DeserializeObject<Configuration>(json);
     }

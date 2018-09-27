@@ -21,12 +21,7 @@ namespace TWIConnect.Client
         var configuration = Configuration.Load();
 
         #region Send Request & Load Response
-        var response = Utilities.Threading.AsyncCallWithTimeout<JObject>
-        (
-          () => RestClient.PostJson<JObject>(configuration.Uri, configuration),
-          (int)(configuration.ThreadTimeToLiveSec * 1000)
-        );
-        var responseConfig = Configuration.FromJObject(response);
+        JObject response = SendReqesut(configuration, configuration);
         string objectType = response.Property(Constants.Configuration.ObjectType).Value.ToString();
         #endregion
 
@@ -74,22 +69,18 @@ namespace TWIConnect.Client
           #endregion
 
           #region Send Request & Load Response
-          response = Utilities.Threading.AsyncCallWithTimeout<JObject>
-          (
-            () => RestClient.PostJson<JObject>((string)responseConfig.Uri, request),
-            (int)(configuration.ThreadTimeToLiveSec * 1000)
-          );
-          responseConfig = Configuration.FromJObject(response);
+          response = SendReqesut(configuration, configuration);
           objectType = response.Property(Constants.Configuration.ObjectType).Value.ToString();
           #endregion
         }
 
+        var responseConfig = Configuration.FromJObject(response);
         Utilities.Threading.AsyncCallWithTimeout
         (
           () => responseConfig.Save(),
           (int)(responseConfig.ThreadTimeToLiveSec * 1000)
         );
-        
+
         Utilities.Logger.Log(Resources.Messages.ProcessSucceeded, Utilities.Logger.GetTimeElapsed(stopWatch));
       }
       catch (Exception ex)
@@ -97,6 +88,16 @@ namespace TWIConnect.Client
         Utilities.Logger.Log(Resources.Messages.ProcessFailed);
         //No action - just quit
       }
+    }
+
+    public static JObject SendReqesut(Configuration configuration, object request)
+    {
+      var response = Utilities.Threading.AsyncCallWithTimeout<JObject>
+              (
+                () => RestClient.PostJson<JObject>(configuration.Uri, configuration),
+                (int)(configuration.ThreadTimeToLiveSec * 1000)
+              );
+      return response;
     }
   }
 }

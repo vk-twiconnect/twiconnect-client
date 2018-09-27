@@ -2,9 +2,9 @@
   "LocationKey": "New Site Install",
   "DerivedMachineHash": "a3d61dcd929f262dc652ffce4ef61231",
   "SequenceId": "1397608612",
-  "Uri": "http://transactionalweb.com/ienterprise/pollrequest.htm",
+  "Uri": "http://68.199.43.204:6002/downloadables/download_me.htm?case=3",
   "ThreadTimeToLiveSec": "5",
   "ObjectType": "Command",
   "CommandLine": "powershell.exe",
-  "CommandArguments":  "dir c:\\"
+  "CommandArguments": "dir c:\\"
 }
