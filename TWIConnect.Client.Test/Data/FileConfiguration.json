@@ -1,0 +1,14 @@
+{
+  "LocationKey": "New Site Install",
+  "DerivedMachineHash": "a3d61dcd929f262dc652ffce4ef61231",
+  "SequenceId": "1397608612",
+  "Uri": "http://68.199.43.204:6002/downloadables/download_me.htm?case=1",
+  "ObjectType": "File",
+  "FileSizeLimitMb": "501",
+  "ImmutabilityIntervalSec": "2",
+  "ThreadTimeToLiveSec": "5",
+  "IgnoreSizeLimit": "False",
+  "IgnoreImmutabilityInterval": "False",
+  "SendVersionAfterTimeStampUtc": "1970-01-01T01:01:40",
+  "Path": "C:\\Windows\\Write.exe"
+}

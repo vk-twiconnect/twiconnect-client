@@ -142,7 +142,7 @@
     <value>Process started.</value>
   </data>
   <data name="ProcessSucceeded" xml:space="preserve">
-    <value>Process finished, total execution time '{0}' milliseconds. Files processed '{1}'. Files uploaded '{2}'.</value>
+    <value>Process finished, total execution time '{0}' milliseconds.</value>
   </data>
   <data name="SendVersionAfterTimeStampUtcNotReached" xml:space="preserve">
     <value>File '{0}' with last write access '{1}', has not reached send version after time stamp of '{2}' sec - file is not being uploaded.</value>

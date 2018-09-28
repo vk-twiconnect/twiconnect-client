@@ -2,7 +2,7 @@
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
      xmlns:netfx="http://schemas.microsoft.com/wix/NetFxExtension">
   
-	<Product Id="*" Name="TWIConnectV2" Language="1033" Version="1.0.0.0" Manufacturer="TransactionalWeb" UpgradeCode="e6c130f9-9aba-4b2a-b091-d33f762dfad9">
+	<Product Id="*" Name="TWIConnectV3" Language="1033" Version="1.0.0.0" Manufacturer="TransactionalWeb" UpgradeCode="e6c130f9-9aba-4b2a-b091-d33f762dfad9">
 		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
 
 		<!--<MajorUpgrade DowngradeErrorMessage="A newer version of 'TWIConnect.Client' is already installed." />-->
@@ -14,9 +14,9 @@
  
 		<PropertyRef Id="NETFRAMEWORK40CLIENT"/>
 
-    <Property Id="CONFIG_XML">
+    <Property Id="CONFIG_FILEL">
       <DirectorySearch Id="SOURCEDIR_SEARCH" Path="[SourceDir]" Depth="0">
-        <FileSearch Id="CONFIG_XML_SEARCH" Name="Configuration.xml" />
+        <FileSearch Id="CONFIG_FILE_SEARCH" Name="Configuration.json" />
       </DirectorySearch>
     </Property>
     
@@ -49,17 +49,17 @@
 		<ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
 
       <Component>
-        <File Id="Configuration.xml" 
-              Name="Configuration.xml" 
-              Source="..\$(var.TWIConnect.Client.Service.ProjectName)\bin\$(var.TWIConnect.Client.Service.Configuration)\Configuration.xml"
+        <File Id="Configuration.json" 
+              Name="Configuration.json" 
+              Source="..\$(var.TWIConnect.Client.Service.ProjectName)\bin\$(var.TWIConnect.Client.Service.Configuration)\Configuration.json"
               Vital="yes" 
               KeyPath="yes"
               DiskId="1" />
-        <Condition>NOT CONFIG_XML</Condition>
+        <Condition>NOT CONFIG_FILE</Condition>
 			</Component>
 
-      <Component Id="Custom_Config_XML" Guid="7A6B6DC4-FB83-4CA1-BB6F-1BF48E668F0A">
-        <CopyFile Id="CopyXMLFile" DestinationProperty="INSTALLFOLDER" SourceProperty="SOURCEDIR" SourceName="Configuration.xml" Delete="no" />
+      <Component Id="Custom_Config_File" Guid="7A6B6DC4-FB83-4CA1-BB6F-1BF48E668F0A">
+        <CopyFile Id="CopyConfigFile" DestinationProperty="INSTALLFOLDER" SourceProperty="SOURCEDIR" SourceName="Configuration.json" Delete="no" />
       </Component>
       
       <Component>

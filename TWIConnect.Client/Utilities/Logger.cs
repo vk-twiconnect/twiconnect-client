@@ -11,7 +11,7 @@ namespace TWIConnect.Client.Utilities
     {
         private static System.Lazy<NLog.Logger> _nLogger = new Lazy<NLog.Logger>(() =>
             {
-                return NLog.LogManager.GetLogger(Constants.Configuration.NLogName);
+                return NLog.LogManager.GetLogger(Constants.FileNames.NLogName);
             });
 
         public static void Log(Exception ex)
@@ -35,7 +35,7 @@ namespace TWIConnect.Client.Utilities
             }
             catch
             {
-                //Intentionally empty catch block to suppress an exception.
+                //Intentionally empty catch block to suppress any exception
             }
         }
 
