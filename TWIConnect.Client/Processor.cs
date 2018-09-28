@@ -62,16 +62,9 @@ namespace TWIConnect.Client
               throw new InvalidOperationException("Invalid ObjectType found in the response from the server: '" + objectType + "'");
           }
 
-          #region Add Common Request Fields
-          request.Add(Constants.Configuration.LocationKey, configuration.LocationKey);
-          request.Add(Constants.Configuration.DerivedMachineHash, configuration.DerivedMachineHash);
-          request.Add(Constants.Configuration.SequenceId, configuration.SequenceId);
-          #endregion
-
-          #region Send Request & Load Response
+          request = AddCommonRequestFields(configuration, request);
           response = SendReqesut(configuration, configuration);
           objectType = response.Property(Constants.Configuration.ObjectType).Value.ToString();
-          #endregion
         }
 
         var responseConfig = Configuration.FromJObject(response);
@@ -88,6 +81,16 @@ namespace TWIConnect.Client
         Utilities.Logger.Log(Resources.Messages.ProcessFailed);
         //No action - just quit
       }
+    }
+
+    public static IDictionary<string, object> AddCommonRequestFields(Configuration configuration, IDictionary<string, object> request)
+    {
+      //Clone original object
+      request = new Dictionary<string, object>(request);
+      request.Add(Constants.Configuration.LocationKey, configuration.LocationKey);
+      request.Add(Constants.Configuration.DerivedMachineHash, configuration.DerivedMachineHash);
+      request.Add(Constants.Configuration.SequenceId, configuration.SequenceId);
+      return request;
     }
 
     public static JObject SendReqesut(Configuration configuration, object request)
