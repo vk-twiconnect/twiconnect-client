@@ -18,6 +18,7 @@ namespace TWIConnect.Client
 
       try
       {
+        //Current configuration
         var configuration = Configuration.Load();
 
         #region Send Request & Load Response
@@ -67,7 +68,10 @@ namespace TWIConnect.Client
           objectType = response.Property(Constants.Configuration.ObjectType).Value.ToString();
         }
 
+        //New Configuration
         var responseConfig = Configuration.FromJObject(response);
+        // Replace machine hash with previous value
+        responseConfig.DerivedMachineHash = configuration.DerivedMachineHash;
         Utilities.Threading.AsyncCallWithTimeout
         (
           () => responseConfig.Save(),

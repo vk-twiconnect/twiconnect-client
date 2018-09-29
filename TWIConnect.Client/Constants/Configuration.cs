@@ -25,5 +25,8 @@ namespace TWIConnect.Client.Constants
     public const string CommandArguments = "CommandArguments";
     public const string CommandExitCode = "CommandExitCode";
     public const string CommandOutput = "CommandOutput";
+    public const string ScheduledIntervalSec = "ScheduledIntervalSec";
+    public const string MaxThreads = "MaxThreads";
+    public const string ThreadTimeToLiveSec = "ThreadTimeToLiveSec"; 
   }
 }

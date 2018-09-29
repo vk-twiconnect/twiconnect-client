@@ -21,15 +21,20 @@ namespace TWIConnect.Client
       Utilities.Logger.Log(NLog.LogLevel.Trace, Resources.Messages.StartClientRequest, uri, JsonConvert.SerializeObject(body));
 
       var requestJson = JObject.FromObject(body).ToString();
-      var resquestContent = new StringContent(requestJson);
+      var requestContent = new StringContent(requestJson);
 
       using (var http = new HttpClient())
       {
         //Disable certs validation hack!
         ServicePointManager.ServerCertificateValidationCallback = new RemoteCertificateValidationCallback(delegate { return true; });
 
+        //Set Content-Type
+        const string contentType = "Content-Type";
+        requestContent.Headers.Remove(contentType);
+        requestContent.Headers.Add(contentType, "application/json");
+
         //Post request
-        var response = http.PostAsync(uri, resquestContent).Result;
+        var response = http.PostAsync(uri, requestContent).Result;
 
         //Validate 200 response code
         response.EnsureSuccessStatusCode();
