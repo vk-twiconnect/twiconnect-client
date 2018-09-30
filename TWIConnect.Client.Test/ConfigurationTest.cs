@@ -21,14 +21,5 @@ namespace TWIConnect.Client.Test
       Assert.IsNotNull(json);
       Assert.IsTrue(json.Contains("New Site Install"));
     }
-
-    [TestMethod]
-    public void PostConfiguration()
-    {
-      var configuration = Configuration.FromFile("/../../Data/Configuration.json");
-      var response = RestClient.PostJson<dynamic>(configuration.Uri, configuration);
-      Assert.IsNotNull(response);
-      Assert.AreEqual(Constants.ObjectType.None, response.ObjectType.ToString());
-    }
   }
 }

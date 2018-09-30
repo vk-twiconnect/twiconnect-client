@@ -67,7 +67,7 @@ namespace TWIConnect.Client
         string configurationFilePath = Constants.FileNames.ConfigurationFileName;
         Utilities.Logger.Log(NLog.LogLevel.Trace, Resources.Messages.StartReadingLocalConfiguration, configurationFilePath);
         string json = Utilities.FileSystem.ReadTextFile(configurationFilePath);
-        Configuration config = Configuration.Load(json);
+        Configuration config = Configuration.FromJson(json);
         Utilities.Logger.Log(NLog.LogLevel.Trace, Resources.Messages.EndOfExecution, "Configuration.Load()", Logger.GetTimeElapsed(stopWatch));
         return config;
       }
