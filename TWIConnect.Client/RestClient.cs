@@ -18,36 +18,44 @@ namespace TWIConnect.Client
     public static T PostJson<T>(string uri, object body)
     {
       System.Diagnostics.Stopwatch stopWatch = System.Diagnostics.Stopwatch.StartNew();
-      Utilities.Logger.Log(NLog.LogLevel.Trace, Resources.Messages.StartClientRequest, uri, JsonConvert.SerializeObject(body));
-
-      var requestJson = JObject.FromObject(body).ToString();
-      var requestContent = new StringContent(requestJson);
-
-      using (var http = new HttpClient())
+      try
       {
-        //Disable certs validation hack!
-        ServicePointManager.ServerCertificateValidationCallback = new RemoteCertificateValidationCallback(delegate { return true; });
+        Utilities.Logger.Log(NLog.LogLevel.Trace, Resources.Messages.StartClientRequest, uri, JsonConvert.SerializeObject(body));
 
-        //Set Content-Type
-        const string contentType = "Content-Type";
-        requestContent.Headers.Remove(contentType);
-        requestContent.Headers.Add(contentType, "application/json");
+        var requestJson = JObject.FromObject(body).ToString();
+        var requestContent = new StringContent(requestJson);
 
-        //Post request
-        var response = http.PostAsync(uri, requestContent).Result;
+        using (var http = new HttpClient())
+        {
+          //Disable certs validation hack!
+          ServicePointManager.ServerCertificateValidationCallback = new RemoteCertificateValidationCallback(delegate { return true; });
 
-        //Validate 200 response code
-        response.EnsureSuccessStatusCode();
+          //Set Content-Type
+          const string contentType = "Content-Type";
+          requestContent.Headers.Remove(contentType);
+          requestContent.Headers.Add(contentType, "application/json");
 
-        //Parse the response
-        var responseContent = response.Content.ReadAsStringAsync().Result;
-        var responseObject = JsonConvert.DeserializeObject<T>(responseContent);
+          //Post request
+          var response = http.PostAsync(uri, requestContent).Result;
 
-        //Log perfromance
-        Utilities.Logger.Log(NLog.LogLevel.Trace, Resources.Messages.EndOfExecution, "RestClient.PostJson", Logger.GetTimeElapsed(stopWatch));
+          //Validate 200 response code
+          response.EnsureSuccessStatusCode();
 
-        //Return parsed object
-        return responseObject;
+          //Parse the response
+          var responseContent = response.Content.ReadAsStringAsync().Result;
+          var responseObject = JsonConvert.DeserializeObject<T>(responseContent);
+
+          //Log perfromance
+          Utilities.Logger.Log(NLog.LogLevel.Trace, Resources.Messages.EndOfExecution, "RestClient.PostJson", Logger.GetTimeElapsed(stopWatch));
+
+          //Return parsed object
+          return responseObject;
+        }
+      }
+      catch (Exception ex)
+      {
+        Utilities.Logger.Log(NLog.LogLevel.Error, ex.ToString(), "RestClient.PostJson", Logger.GetTimeElapsed(stopWatch));
+        throw;
       }
     }
   }

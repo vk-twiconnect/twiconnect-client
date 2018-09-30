@@ -112,6 +112,7 @@
 {
   "LocationKey": "New Site Install",
   "DerivedMachineHash": "a3d61dcd929f262dc652ffce4ef61231",
+  "ScheduledIntervalSec": "15",
   "ObjectType":  "File",
   "SequenceId": "1397608612",
   "Uri": "http://transactionalweb.com/ienterprise/pollrequest.htm",
@@ -131,6 +132,7 @@
 {
   "LocationKey": "New Site Install",
   "DerivedMachineHash": "a3d61dcd929f262dc652ffce4ef61231",
+  "ScheduledIntervalSec": "15",
   "ObjectType":  "Folder",
   "SequenceId": "1397608612",
   "Uri": "http://transactionalweb.com/ienterprise/pollrequest.htm",
@@ -146,6 +148,7 @@
   "LocationKey": "New Site Install",
   "DerivedMachineHash": "a3d61dcd929f262dc652ffce4ef61231",
   "SequenceId": "1397608612",
+  "ScheduledIntervalSec": "15",
   "ObjectType":  "Command",
   "Uri": "http://transactionalweb.com/ienterprise/pollrequest.htm",
   "ThreadTimeToLiveSec": "5",

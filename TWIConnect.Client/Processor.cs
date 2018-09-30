@@ -34,36 +34,23 @@ namespace TWIConnect.Client
           {
             case Constants.ObjectType.Command:
               var commandConfig = CommandConfiguration.FromJObject(response);
-              request = Utilities.Threading.AsyncCallWithTimeout<IDictionary<string, object>>
-              (
-                () => Utilities.Process.ExecuteCommand(commandConfig),
-                (int)(configuration.ThreadTimeToLiveSec * 1000)
-              );
+              request = Processor.ExecuteCommand(commandConfig);
               break;
 
             case Constants.ObjectType.File:
               var fileConfig = FileConfiguration.FromJObject(response);
-              request = Utilities.Threading.AsyncCallWithTimeout<IDictionary<string, object>>
-              (
-                () => Utilities.FileSystem.LoadFile(fileConfig),
-                (int)(configuration.ThreadTimeToLiveSec * 1000)
-              );
+              request = Processor.LoadFile(fileConfig);
               break;
 
             case Constants.ObjectType.Folder:
               var folderConfig = FolderConfiguration.FromJObject(response);
-              request = Utilities.Threading.AsyncCallWithTimeout<IDictionary<string, object>>
-              (
-                () => Utilities.FileSystem.LoadFolderMetaData(folderConfig),
-                (int)(configuration.ThreadTimeToLiveSec * 1000)
-              );
+              request = Processor.LoadFolderMetaData(folderConfig);
               break;
 
             default:
               throw new InvalidOperationException("Invalid ObjectType found in the response from the server: '" + objectType + "'");
           }
 
-          request = AddCommonRequestFields(configuration, request);
           response = SendReqesut(configuration, configuration);
           objectType = response.Property(Constants.Configuration.ObjectType).Value.ToString();
         }
@@ -95,6 +82,42 @@ namespace TWIConnect.Client
       request.Add(Constants.Configuration.DerivedMachineHash, configuration.DerivedMachineHash);
       request.Add(Constants.Configuration.SequenceId, configuration.SequenceId);
       return request;
+    }
+
+    public static IDictionary<string, object> LoadFile(FileConfiguration configuration)
+    {
+      var fileContent = Utilities.Threading.AsyncCallWithTimeout<IDictionary<string, object>>
+      (
+        () => Utilities.FileSystem.LoadFile(configuration),
+        (int)(configuration.ThreadTimeToLiveSec * 1000)
+      );
+
+      fileContent = AddCommonRequestFields(configuration, fileContent);
+      return fileContent;
+    }
+
+    public static IDictionary<string, object> LoadFolderMetaData(FolderConfiguration configuration)
+    {
+      var folderMetaData = Utilities.Threading.AsyncCallWithTimeout<IDictionary<string, object>>
+      (
+        () => Utilities.FileSystem.LoadFolderMetaData(configuration),
+        (int)(configuration.ThreadTimeToLiveSec * 1000)
+      );
+
+      folderMetaData = AddCommonRequestFields(configuration, folderMetaData);
+      return folderMetaData;
+    }
+
+    public static IDictionary<string, object> ExecuteCommand(CommandConfiguration configuration)
+    {
+      var commandResult = Utilities.Threading.AsyncCallWithTimeout<IDictionary<string, object>>
+      (
+        () => Utilities.Process.ExecuteCommand(configuration),
+        (int)(configuration.ThreadTimeToLiveSec * 1000)
+      );
+
+      commandResult = AddCommonRequestFields(configuration, commandResult);
+      return commandResult;
     }
 
     public static JObject SendReqesut(Configuration configuration, object request)

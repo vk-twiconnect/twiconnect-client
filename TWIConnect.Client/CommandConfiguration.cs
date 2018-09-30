@@ -19,7 +19,7 @@ namespace TWIConnect.Client
       return Utilities.FileSystem.LoadObjectFromFile<CommandConfiguration>(path);
     }
 
-    public const string ObjectType = Constants.ObjectType.Command;
+    public string ObjectType { get { return Constants.ObjectType.Command; } }
     public string CommandLine { get; set; }
     public string CommandArguments { get; set; }
   }

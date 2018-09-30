@@ -37,7 +37,6 @@ namespace TWIConnect.Client.Test
       IEnumerable<IDictionary<string, object>> subFolders = info[Constants.Configuration.SubFolders] as IEnumerable<IDictionary<string, object>>;
       Assert.IsNotNull(subFolders.Where(sf => (string)sf[Constants.Configuration.Path] == config.Path + @"\Help"));
       Assert.IsTrue(((DateTime)info[Constants.Configuration.Modified]) > DateTime.MinValue);
-
     }
   }
 }

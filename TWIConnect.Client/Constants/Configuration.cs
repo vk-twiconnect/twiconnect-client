@@ -27,6 +27,11 @@ namespace TWIConnect.Client.Constants
     public const string CommandOutput = "CommandOutput";
     public const string ScheduledIntervalSec = "ScheduledIntervalSec";
     public const string MaxThreads = "MaxThreads";
-    public const string ThreadTimeToLiveSec = "ThreadTimeToLiveSec"; 
+    public const string ThreadTimeToLiveSec = "ThreadTimeToLiveSec";
+    public const string ImmutabilityIntervalSec = "ImmutabilityIntervalSec";
+    public const string FileSizeLimitMb = "FileSizeLimitMb";
+    public const string IgnoreSizeLimit = "IgnoreSizeLimit";
+    public const string IgnoreImmutabilityInterval = "IgnoreImmutabilityInterval";
+    public const string SendVersionAfterTimeStampUtc = "SendVersionAfterTimeStampUtc";
   }
 }

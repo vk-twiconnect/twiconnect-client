@@ -19,7 +19,7 @@ namespace TWIConnect.Client
       return Utilities.FileSystem.LoadObjectFromFile<FileConfiguration>(path);
     }
 
-    public const string ObjectType = Constants.ObjectType.File;
+    public string ObjectType { get { return Constants.ObjectType.File; } }
     public int FileSizeLimitMb { get; set; }
     public int ImmutabilityIntervalSec { get; set; }
     public bool IgnoreSizeLimit { get; set; }
