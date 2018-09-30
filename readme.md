@@ -19,6 +19,13 @@
 ### Http-Verb
 
 * All requests will use POST verb to the uri from the configuration/server response json
+The Client request contains several Optional parameters that the server is
+not going to act on.  These optional parameters will be used for diagnostic purposes.
+Optional Parameters for Client -to- Server communciations
+  "ScheduledIntervalSec": "15",
+  "ThreadTimeToLiveSec": "5",
+  "Uri": "http://68.199.43.204:6002/polling/pollrequest_case_0.htm"
+
 
 
 ### Current Configuration
@@ -30,7 +37,7 @@
   "ScheduledIntervalSec": "15",
   "ThreadTimeToLiveSec": "5",
   "SequenceId": "1397608612",
-  "Uri": "http://transactionalweb.com/ienterprise/pollrequest.htm"
+  "Uri": "http://68.199.43.204:6002/polling/pollrequest_case_0.htm"
 }
 ```
 
@@ -89,65 +96,69 @@
 ```
 
 **Note:** do not use `cmd.exe`, it tends to hang on completion.
+TODO:  Can processses be killed if they run on too long?
 
-## Server Responses
+## Expected Server Responses
+As a means of simplifying testing,  each of the 4 different test cases has its own Uri.
+These test cases show how the server asks for the client to do things in the
+next poll (after receiving one of these responses).
+In the event the client correctly makes a subsequent http call to the server,
+the server will return to case_0.
 
-### Update Configuration Only
+### Update Configuration Only (Case 0)
 
 ```
 {
   "LocationKey": "New Site Install",
-  "DerivedMachineHash": "a3d61dcd929f262dc652ffce4ef61231",
   "ScheduledIntervalSec": "15",
   "ThreadTimeToLiveSec": "5",
   "SequenceId": "1397608612",
   "ObjectType":  "None",
-  "Uri": "http://transactionalweb.com/ienterprise/pollrequest.htm"
+  "Uri": "http://68.199.43.204:6002/polling/pollrequest_case_1.htm"
 }
 ```
 
-### Upload File
+### Upload File  (Case 1)
 
 ```
 {
   "LocationKey": "New Site Install",
-  "DerivedMachineHash": "a3d61dcd929f262dc652ffce4ef61231",
   "ObjectType":  "File",
   "SequenceId": "1397608612",
-  "Uri": "http://transactionalweb.com/ienterprise/pollrequest.htm",
+  "Uri": "http://68.199.43.204:6002/polling/pollrequest_case_1.htm",
   "ThreadTimeToLiveSec": "5",
   "ImmutabilityIntervalSec": "2",
   "FileSizeLimitMb": "501",
   "IgnoreSizeLimit": "False",
   "IgnoreImmutabilityInterval": "False",
   "SendVersionAfterTimeStampUtc": "1970-01-01T01:01:40",
-  "Path": "C:\\Temp\\Configuration.json"
+  "Path": "C:\\Temp\\Configuration.json",
+  "ScheduledIntervalSec": "15"
 }
 ```
 
-### Upload Folder Meta-data
+### Upload Folder Meta-data  (Case 2)
 
 ```
 {
   "LocationKey": "New Site Install",
-  "DerivedMachineHash": "a3d61dcd929f262dc652ffce4ef61231",
   "ObjectType":  "Folder",
   "SequenceId": "1397608612",
-  "Uri": "http://transactionalweb.com/ienterprise/pollrequest.htm",
+  "Uri": "http://68.199.43.204:6002/polling/pollrequest_case_2.htm",
   "ThreadTimeToLiveSec": "5",
-  "Path": "C:\\Temp"
+  "Path": "C:\\Temp",
+  "ScheduledIntervalSec": "20"
 }
 ```
 * ThreadTimeToLive settings will limit time collecting folder meta-data
 
-### Execute Command
+### Execute Command  (Case 3)
 ```
 {
   "LocationKey": "New Site Install",
-  "DerivedMachineHash": "a3d61dcd929f262dc652ffce4ef61231",
   "SequenceId": "1397608612",
   "ObjectType":  "Command",
-  "Uri": "http://transactionalweb.com/ienterprise/pollrequest.htm",
+  "Uri": "http://68.199.43.204:6002/polling/pollrequest_case_3.htm",
   "ThreadTimeToLiveSec": "5",
   "CommandLine": "powershell.exe"
   "CommandArguments": "dir c:\\"
