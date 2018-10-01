@@ -123,7 +123,7 @@ namespace TWIConnect.Client.Test
       Assert.IsNotNull(request[Constants.Configuration.CommandExitCode]);
       #endregion
 
-      var response = RestClient.PostJson<dynamic>(configuration.Uri, request);
+      var response = RestClient.PostJson<Dictionary<string, object>>(configuration.Uri, request);
 
       #region Validate Response
       Assert.AreEqual(Constants.ObjectType.Command, response[Constants.Configuration.ObjectType].ToString());
