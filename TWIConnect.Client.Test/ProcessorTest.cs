@@ -132,5 +132,33 @@ namespace TWIConnect.Client.Test
       validateCommonResponseFields(response);
       #endregion
     }
+
+    [TestMethod]
+    public void ObjectTypeFile()
+    {
+      var configuration = CommandConfiguration.FromFile("./Data/FileConfiguration.json");
+      Processor.ClientServerLoop(configuration);
+    }
+
+    [TestMethod]
+    public void ObjectTypeFolder()
+    {
+      var configuration = CommandConfiguration.FromFile("./Data/FolderConfiguration.json");
+      Processor.ClientServerLoop(configuration);
+    }
+
+    [TestMethod]
+    public void ObjectTypeCommand()
+    {
+      var configuration = CommandConfiguration.FromFile("./Data/CommandConfiguration.json");
+      Processor.ClientServerLoop(configuration);
+    }
+
+    [TestMethod]
+    public void ObjectTypeNone()
+    {
+      var configuration = CommandConfiguration.FromFile("./Data/Configuration.json");
+      Processor.ClientServerLoop(configuration);
+    }
   }
 }
