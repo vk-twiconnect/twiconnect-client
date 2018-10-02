@@ -72,14 +72,23 @@
 			</Component>
 
       <Component>
-        <File Id="Readme.txt" 
-              Name="Readme.txt" 
-              Source="..\$(var.TWIConnect.Client.Service.ProjectName)\bin\$(var.TWIConnect.Client.Service.Configuration)\Readme.txt"
+        <File Id="Readme.md" 
+              Name="Readme.md" 
+              Source="..\$(var.TWIConnect.Client.Service.ProjectName)\..\Readme.md"
               Vital="yes" 
               KeyPath="yes"
               DiskId="1" />
 			</Component>
 
+      <Component>
+        <File Id="LICENSE"
+              Name="LICENSE"
+              Source="..\$(var.TWIConnect.Client.Service.ProjectName)\..\LICENSE"
+              Vital="yes"
+              KeyPath="yes"
+              DiskId="1" />
+      </Component>
+      
       <Component>
         <File Id="TWIConnect.Client.dll" 
               Name="TWIConnect.Client.dll" 
