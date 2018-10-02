@@ -8,7 +8,7 @@
 		<!--<MajorUpgrade DowngradeErrorMessage="A newer version of 'TWIConnect.Client' is already installed." />-->
 		<MediaTemplate />
 
-		<Feature Id="ProductFeature" Title="TWIConnectV2.Client.Setup" Level="1">
+		<Feature Id="ProductFeature" Title="TWIConnectV3.Client.Setup" Level="1">
 			<ComponentGroupRef Id="ProductComponents" />
 		</Feature>
  
@@ -40,7 +40,7 @@
 	<Fragment>
 		<Directory Id="TARGETDIR" Name="SourceDir">
 			<Directory Id="ProgramFilesFolder">
-				<Directory Id="INSTALLFOLDER" Name="TWIConnectV2" />
+				<Directory Id="INSTALLFOLDER" Name="TWIConnectV3" />
 			</Directory>
 		</Directory>
 	</Fragment>
@@ -89,7 +89,24 @@
               DiskId="1" />
 			</Component>
 
+      <Component>
+        <File Id="Newtonsoft.Json.dll"
+              Name="Newtonsoft.Json.dll"
+              Source="..\$(var.TWIConnect.Client.Service.ProjectName)\bin\$(var.TWIConnect.Client.Service.Configuration)\Newtonsoft.Json.dll"
+              Vital="yes"
+              KeyPath="yes"
+              DiskId="1" />
+      </Component>
 
+      <Component>
+        <File Id="System.Net.Http.dll"
+              Name="System.Net.Http.dll"
+              Source="..\$(var.TWIConnect.Client.Service.ProjectName)\bin\$(var.TWIConnect.Client.Service.Configuration)\System.Net.Http.dll"
+              Vital="yes"
+              KeyPath="yes"
+              DiskId="1" />
+      </Component>
+      
       <Component>
         <File Id="TWIConnect.Client.Service.exe.config" 
               Name="TWIConnect.Client.Service.exe.config" 

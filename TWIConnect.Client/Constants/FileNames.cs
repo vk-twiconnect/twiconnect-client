@@ -8,6 +8,6 @@ namespace TWIConnect.Client.Constants
   public struct FileNames
   {
     public const string NLogName = "FileLog";
-    public const string ConfigurationFileName = ".\\Configuration.json";
+    public const string ConfigurationFileName = "Configuration.json";
   }
 }

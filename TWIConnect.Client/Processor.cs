@@ -23,7 +23,7 @@ namespace TWIConnect.Client
       }
       catch (Exception ex)
       {
-        Utilities.Logger.Log(Resources.Messages.ProcessFailed, ex.ToString());
+        Utilities.Logger.Log(ex);
         //No action - just quit
       }
     }

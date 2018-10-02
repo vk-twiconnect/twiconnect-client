@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using TWIConnect.Client.Utilities;
+using System.Reflection;
 
 namespace TWIConnect.Client.Utilities
 {
@@ -194,6 +195,14 @@ namespace TWIConnect.Client.Utilities
       var jObject = Newtonsoft.Json.Linq.JObject.Parse(json);
       var result = jObject.ToObject<T>();
       return result;
+    }
+
+    public static string GetCurrentFolderName()
+    {
+      string codeBase = Assembly.GetExecutingAssembly().CodeBase;
+      UriBuilder uri = new UriBuilder(codeBase);
+      string path = Uri.UnescapeDataString(uri.Path);
+      return Path.GetDirectoryName(path);
     }
   }
 }

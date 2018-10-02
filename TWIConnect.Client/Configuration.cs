@@ -64,7 +64,7 @@ namespace TWIConnect.Client
       try
       {
         System.Diagnostics.Stopwatch stopWatch = System.Diagnostics.Stopwatch.StartNew();
-        string configurationFilePath = Constants.FileNames.ConfigurationFileName;
+        string configurationFilePath = FileSystem.GetCurrentFolderName() + "\\" + Constants.FileNames.ConfigurationFileName;
         Utilities.Logger.Log(NLog.LogLevel.Trace, Resources.Messages.StartReadingLocalConfiguration, configurationFilePath);
         string json = Utilities.FileSystem.ReadTextFile(configurationFilePath);
         Configuration config = Configuration.FromJson(json);
