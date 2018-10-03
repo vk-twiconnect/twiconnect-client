@@ -30,15 +30,7 @@ namespace TWIConnect.Client
 
     public static void ClientServerLoop(Configuration configuration = null)
     {
-      var config = (configuration is FileConfiguration)?
-                      (FileConfiguration)configuration:
-                        (configuration is FolderConfiguration) ?
-                          (FolderConfiguration)configuration :
-                            (configuration is CommandConfiguration) ?
-                              (CommandConfiguration)configuration :
-                                configuration;
-
-      JObject response = SendReqesut(config, config);
+      JObject response = SendReqesut(configuration, configuration);
       string objectType = string.Empty;
       IDictionary<string, object> request = null;
       Configuration newConfiguration = null;
@@ -54,7 +46,7 @@ namespace TWIConnect.Client
             newConfiguration = Configuration.FromJObject(response);
             
             // Replace machine hash with previous value
-            newConfiguration.DerivedMachineHash = config.DerivedMachineHash;
+            newConfiguration.DerivedMachineHash = configuration.DerivedMachineHash;
 
             //Save new configuration to disk
             Utilities.Threading.AsyncCallWithTimeout

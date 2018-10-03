@@ -10,7 +10,6 @@ namespace TWIConnect.Client.Test
     {
       Configuration configuration = Configuration.Load();
       Assert.IsNotNull(configuration);
-      Assert.AreEqual("New Site Install", configuration.LocationKey);
     }
 
     [TestMethod]
@@ -19,7 +18,7 @@ namespace TWIConnect.Client.Test
       Configuration configuration = Configuration.Load();
       string json = configuration.ToString();
       Assert.IsNotNull(json);
-      Assert.IsTrue(json.Contains("New Site Install"));
+      Assert.IsTrue(json.Contains("Location"));
     }
   }
 }

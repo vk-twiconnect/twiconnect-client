@@ -142,7 +142,10 @@ namespace TWIConnect.Client
 
         lock (fileLock)
         {
-            Utilities.FileSystem.WriteTextFile(Constants.FileNames.ConfigurationFileName, configToSave.ToString());
+          Utilities.FileSystem.WriteTextFile(
+            Utilities.FileSystem.GetCurrentFolderName() + "\\" + Constants.FileNames.ConfigurationFileName,
+            configToSave.ToString()
+          );
         }
       }
       catch (Exception ex)

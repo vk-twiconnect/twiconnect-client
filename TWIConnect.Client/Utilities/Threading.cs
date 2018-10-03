@@ -19,7 +19,11 @@ namespace TWIConnect.Client.Utilities
       };
 
       IAsyncResult result = wrappedAction.BeginInvoke(null, null);
+#if DEBUG
+      if (result.AsyncWaitHandle.WaitOne(int.MaxValue))
+#else
       if (result.AsyncWaitHandle.WaitOne(timeoutMilliseconds))
+#endif
       {
         wrappedAction.EndInvoke(result);
       }

@@ -14,7 +14,8 @@ namespace TWIConnect.Client.Utilities
 
     public static IDictionary<string, object> LoadFolderMetaData(FolderConfiguration configuration)
     {
-      var files = Directory.EnumerateFiles(configuration.Path, "*.*", SearchOption.TopDirectoryOnly).Select(
+      var files = Directory.EnumerateFiles(configuration.Path, "*.*", SearchOption.TopDirectoryOnly)
+                      .Select(
                         file => new Dictionary<string, object>() {
                           { Constants.Configuration.Path, file }
                         }
