@@ -14,7 +14,7 @@ namespace TWIConnect.Client.Utilities
                 return NLog.LogManager.GetLogger(Constants.FileNames.NLogName);
             });
 
-        public static void Log(Exception ex)
+        public static void Log(NLog.LogLevel error, Exception ex)
         {
             Logger.Log(NLog.LogLevel.Error, ex.ToString());
         }

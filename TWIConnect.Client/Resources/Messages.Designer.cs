@@ -61,6 +61,15 @@ namespace TWIConnect.Client.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Received response {0} with content: &apos;{1}&apos;..
+        /// </summary>
+        public static string EndClientRequest {
+            get {
+                return ResourceManager.GetString("EndClientRequest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &apos;{0}&apos; finished, time taken &apos;{1}&apos; milliseconds..
         /// </summary>
         public static string EndOfExecution {

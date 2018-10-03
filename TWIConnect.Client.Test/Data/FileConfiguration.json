@@ -6,7 +6,7 @@
   "ObjectType": "File",
   "FileSizeLimitMb": "501",
   "ImmutabilityIntervalSec": "2",
-  "ThreadTimeToLiveSec": "5",
+  "ThreadTimeToLiveSec": "120",
   "IgnoreSizeLimit": "False",
   "IgnoreImmutabilityInterval": "False",
   "SendVersionAfterTimeStampUtc": "1970-01-01T01:01:40",

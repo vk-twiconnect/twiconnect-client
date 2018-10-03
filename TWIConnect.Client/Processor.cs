@@ -18,19 +18,26 @@ namespace TWIConnect.Client
 
       try
       {
-        Processor.ClientServerLoop();
+        Processor.ClientServerLoop(Configuration.Load());
         Utilities.Logger.Log(Resources.Messages.ProcessSucceeded, Utilities.Logger.GetTimeElapsed(stopWatch));
       }
       catch (Exception ex)
       {
-        Utilities.Logger.Log(ex);
+        Utilities.Logger.Log(NLog.LogLevel.Error, ex);
         //No action - just quit
       }
     }
 
     public static void ClientServerLoop(Configuration configuration = null)
     {
-      var config = configuration ?? Configuration.Load();
+      var config = (configuration is FileConfiguration)?
+                      (FileConfiguration)configuration:
+                        (configuration is FolderConfiguration) ?
+                          (FolderConfiguration)configuration :
+                            (configuration is CommandConfiguration) ?
+                              (CommandConfiguration)configuration :
+                                configuration;
+
       JObject response = SendReqesut(config, config);
       string objectType = string.Empty;
       IDictionary<string, object> request = null;
@@ -139,7 +146,7 @@ namespace TWIConnect.Client
     {
       var response = Utilities.Threading.AsyncCallWithTimeout<JObject>
               (
-                () => RestClient.PostJson<JObject>(configuration.Uri, configuration),
+                () => Utilities.RestClient.PostJson<JObject>(configuration.Uri, request),
                 (int)(configuration.ThreadTimeToLiveSec * 1000)
               );
       return response;

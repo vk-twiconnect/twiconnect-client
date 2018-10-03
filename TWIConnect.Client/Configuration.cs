@@ -73,8 +73,8 @@ namespace TWIConnect.Client
       }
       catch (Exception ex)
       {
-        Utilities.Logger.Log(ex);
-        throw ex;
+        Utilities.Logger.Log(NLog.LogLevel.Error, ex);
+        throw;
       }
     }
 
@@ -147,8 +147,8 @@ namespace TWIConnect.Client
       }
       catch (Exception ex)
       {
-        Utilities.Logger.Log(ex);
-        throw ex;
+        Utilities.Logger.Log(NLog.LogLevel.Error, ex);
+        throw;
       }
     }
 

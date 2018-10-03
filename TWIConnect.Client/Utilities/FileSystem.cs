@@ -39,7 +39,7 @@ namespace TWIConnect.Client.Utilities
                           }
                           catch (Exception ex)
                           {
-                            Utilities.Logger.Log(ex);
+                            Utilities.Logger.Log(NLog.LogLevel.Error, ex);
                             return 0.0;
                           }
                         });

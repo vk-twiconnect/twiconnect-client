@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace TWIConnect.Client
+namespace TWIConnect.Client.Utilities
 {
   public static class RestClient
   {
@@ -45,6 +45,15 @@ namespace TWIConnect.Client
           var responseContent = response.Content.ReadAsStringAsync().Result;
           var responseObject = JsonConvert.DeserializeObject<T>(responseContent);
 
+          //Log Response
+          Utilities.Logger.Log(
+            NLog.LogLevel.Trace, 
+            Resources.Messages.EndClientRequest, 
+            JsonConvert.SerializeObject(response), 
+            JsonConvert.SerializeObject(responseObject)
+          );
+
+
           //Log perfromance
           Utilities.Logger.Log(NLog.LogLevel.Trace, Resources.Messages.EndOfExecution, "RestClient.PostJson", Logger.GetTimeElapsed(stopWatch));
 
@@ -54,7 +63,8 @@ namespace TWIConnect.Client
       }
       catch (Exception ex)
       {
-        Utilities.Logger.Log(NLog.LogLevel.Error, ex.ToString(), "RestClient.PostJson", Logger.GetTimeElapsed(stopWatch));
+        Utilities.Logger.Log(NLog.LogLevel.Error, ex);
+        Utilities.Logger.Log(NLog.LogLevel.Error, "RestClient.PostJson", Logger.GetTimeElapsed(stopWatch));
         throw;
       }
     }

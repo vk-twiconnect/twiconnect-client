@@ -4,6 +4,6 @@
   "ObjectType": "Folder",
   "SequenceId": "1397608612",
   "Uri": "http://68.199.43.204:6002/polling/pollrequest_case_2.htm",
-  "ThreadTimeToLiveSec": "5",
+  "ThreadTimeToLiveSec": "120",
   "Path": "C:\\Windows\\Help"
 }

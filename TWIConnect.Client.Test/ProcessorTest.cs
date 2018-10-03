@@ -27,7 +27,7 @@ namespace TWIConnect.Client.Test
     public void PostConfiguration()
     {
       var configuration = Configuration.FromFile("./Data/Configuration.json");
-      var response = RestClient.PostJson<Dictionary<string, object>>(configuration.Uri, configuration);
+      var response = Utilities.RestClient.PostJson<Dictionary<string, object>>(configuration.Uri, configuration);
 
       validateCommonResponseFields(response);
       Assert.AreEqual(Constants.ObjectType.None, response[Constants.Configuration.ObjectType].ToString());
@@ -54,7 +54,7 @@ namespace TWIConnect.Client.Test
       Assert.IsTrue(((DateTime)request[Constants.Configuration.Modified]) > DateTime.MinValue);
       #endregion
 
-      var response = RestClient.PostJson<Dictionary<string, object>>(configuration.Uri, request);
+      var response = Utilities.RestClient.PostJson<Dictionary<string, object>>(configuration.Uri, request);
 
       #region Validate Response
       Assert.AreEqual(Constants.ObjectType.File, response[Constants.Configuration.ObjectType].ToString());
@@ -99,7 +99,7 @@ namespace TWIConnect.Client.Test
       );
       #endregion
 
-      var response = RestClient.PostJson<Dictionary<string, object>>(configuration.Uri, request);
+      var response = Utilities.RestClient.PostJson<Dictionary<string, object>>(configuration.Uri, request);
 
       #region Validate Response
       Assert.AreEqual(Constants.ObjectType.Folder, response[Constants.Configuration.ObjectType].ToString());
@@ -123,7 +123,7 @@ namespace TWIConnect.Client.Test
       Assert.IsNotNull(request[Constants.Configuration.CommandExitCode]);
       #endregion
 
-      var response = RestClient.PostJson<Dictionary<string, object>>(configuration.Uri, request);
+      var response = Utilities.RestClient.PostJson<Dictionary<string, object>>(configuration.Uri, request);
 
       #region Validate Response
       Assert.AreEqual(Constants.ObjectType.Command, response[Constants.Configuration.ObjectType].ToString());
@@ -136,14 +136,15 @@ namespace TWIConnect.Client.Test
     [TestMethod]
     public void ObjectTypeFile()
     {
-      var configuration = CommandConfiguration.FromFile("./Data/FileConfiguration.json");
+      var path = Utilities.FileSystem.GetCurrentFolderName() + "./Data/FileConfiguration.json";
+      var configuration = FileConfiguration.FromFile(path);
       Processor.ClientServerLoop(configuration);
     }
 
     [TestMethod]
     public void ObjectTypeFolder()
     {
-      var configuration = CommandConfiguration.FromFile("./Data/FolderConfiguration.json");
+      var configuration = FolderConfiguration.FromFile("./Data/FolderConfiguration.json");
       Processor.ClientServerLoop(configuration);
     }
 
@@ -157,7 +158,7 @@ namespace TWIConnect.Client.Test
     [TestMethod]
     public void ObjectTypeNone()
     {
-      var configuration = CommandConfiguration.FromFile("./Data/Configuration.json");
+      var configuration = Configuration.FromFile("./Data/Configuration.json");
       Processor.ClientServerLoop(configuration);
     }
   }
