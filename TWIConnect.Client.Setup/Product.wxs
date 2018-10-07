@@ -1,102 +1,103 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
      xmlns:netfx="http://schemas.microsoft.com/wix/NetFxExtension">
-  
-	<Product Id="*" Name="TWIConnectV3" Language="1033" Version="1.0.0.0" Manufacturer="TransactionalWeb" UpgradeCode="e6c130f9-9aba-4b2a-b091-d33f762dfad9">
-		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
 
-		<!--<MajorUpgrade DowngradeErrorMessage="A newer version of 'TWIConnect.Client' is already installed." />-->
-		<MediaTemplate />
+  <Product Id="*" Name="TWIConnectV3" Language="1033" Version="1.0.0.0" Manufacturer="TransactionalWeb" UpgradeCode="e6c130f9-9aba-4b2a-b091-d33f762dfad9">
+    <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
 
-		<Feature Id="ProductFeature" Title="TWIConnectV3.Client.Setup" Level="1">
-			<ComponentGroupRef Id="ProductComponents" />
-		</Feature>
- 
-		<PropertyRef Id="NETFRAMEWORK40CLIENT"/>
+    <MediaTemplate />
 
-    <Property Id="CONFIG_FILEL">
+    <Feature Id="ProductFeature" Title="TWIConnectV3.Client.Setup" Level="1">
+      <ComponentGroupRef Id="ProductComponents" />
+    </Feature>
+
+    <PropertyRef Id="NETFRAMEWORK40CLIENT"/>
+
+    <Property Id="CONFIG_FILE">
       <DirectorySearch Id="SOURCEDIR_SEARCH" Path="[SourceDir]" Depth="0">
         <FileSearch Id="CONFIG_FILE_SEARCH" Name="Configuration.json" />
       </DirectorySearch>
     </Property>
-    
+
     <Condition Message="This application requires .NET Framework 4.0. Please install the .NET Framework then run this installer again.">
       <![CDATA[Installed OR NETFRAMEWORK40CLIENT]]>
     </Condition>
 
-    <!-- over-night-sync -->
-		<!--<CustomAction Id="InstallService" Directory="INSTALLFOLDER" ExeCommand="Notepad.exe [INSTALLFOLDER]Readme.txt" Return="check" />    
-
-		<InstallExecuteSequence>
-		  <Custom Action="InstallService" After="InstallFinalize">NOT Installed</Custom>
-	   </InstallExecuteSequence>-->
-
     <InstallExecuteSequence>
       <RemoveExistingProducts After="InstallValidate" />
     </InstallExecuteSequence>
-    
-  </Product>
-  
-	<Fragment>
-		<Directory Id="TARGETDIR" Name="SourceDir">
-			<Directory Id="ProgramFilesFolder">
-				<Directory Id="INSTALLFOLDER" Name="TWIConnectV3" />
-			</Directory>
-		</Directory>
-	</Fragment>
 
-	<Fragment>
-		<ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
+  </Product>
+
+  <Fragment>
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="ProgramFilesFolder">
+        <Directory Id="INSTALLFOLDER" Name="TWIConnectV3" />
+      </Directory>
+    </Directory>
+  </Fragment>
+
+  <Fragment>
+    <ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
 
       <Component>
-        <File Id="Configuration.json" 
-              Name="Configuration.json" 
+        <File Id="Configuration.json"
+              Name="Configuration.json"
               Source="..\$(var.TWIConnect.Client.Service.ProjectName)\bin\$(var.TWIConnect.Client.Service.Configuration)\Configuration.json"
-              Vital="yes" 
+              Vital="yes"
               KeyPath="yes"
               DiskId="1" />
         <Condition>NOT CONFIG_FILE</Condition>
-			</Component>
-
-      <Component Id="Custom_Config_File" Guid="7A6B6DC4-FB83-4CA1-BB6F-1BF48E668F0A">
-        <CopyFile Id="CopyConfigFile" DestinationProperty="INSTALLFOLDER" SourceProperty="SOURCEDIR" SourceName="Configuration.json" Delete="no" />
       </Component>
-      
+
+      <Component Id="Custom_CONFIG_FILE" Guid="7A6B6DC4-FB83-4CA1-BB6F-1BF48E668F0A">
+        <CopyFile Id="CopyXMLFile" DestinationProperty="INSTALLFOLDER" SourceProperty="SOURCEDIR" SourceName="Configuration.json" Delete="no" />
+      </Component>
+
       <Component>
-        <File Id="NLog.dll" 
-              Name="NLog.dll" 
+        <File Id="NLog.dll"
+              Name="NLog.dll"
               Source="..\$(var.TWIConnect.Client.Service.ProjectName)\bin\$(var.TWIConnect.Client.Service.Configuration)\NLog.dll"
-              Vital="yes" 
+              Vital="yes"
               KeyPath="yes"
               DiskId="1" />
-			</Component>
+      </Component>
 
       <Component>
-        <File Id="Readme.md" 
-              Name="Readme.md" 
+        <File Id="Readme.md"
+              Name="Readme.md"
               Source="..\$(var.TWIConnect.Client.Service.ProjectName)\..\Readme.md"
-              Vital="yes" 
+              Vital="yes"
               KeyPath="yes"
               DiskId="1" />
-			</Component>
+      </Component>
 
       <Component>
-        <File Id="LICENSE"
-              Name="LICENSE"
-              Source="..\$(var.TWIConnect.Client.Service.ProjectName)\..\LICENSE"
+        <File Id="License"
+              Name="License"
+              Source="..\$(var.TWIConnect.Client.Service.ProjectName)\..\License"
               Vital="yes"
               KeyPath="yes"
               DiskId="1" />
       </Component>
       
       <Component>
-        <File Id="TWIConnect.Client.dll" 
-              Name="TWIConnect.Client.dll" 
+        <File Id="TWIConnect.Client.dll"
+              Name="TWIConnect.Client.dll"
               Source="..\$(var.TWIConnect.Client.Service.ProjectName)\bin\$(var.TWIConnect.Client.Service.Configuration)\TWIConnect.Client.dll"
-              Vital="yes" 
+              Vital="yes"
               KeyPath="yes"
               DiskId="1" />
-			</Component>
+      </Component>
+
+      <Component>
+        <File Id="TWIConnect.Client.Service.exe.config"
+              Name="TWIConnect.Client.Service.exe.config"
+              Source="..\$(var.TWIConnect.Client.Service.ProjectName)\bin\$(var.TWIConnect.Client.Service.Configuration)\TWIConnect.Client.Service.exe.config"
+              Vital="yes"
+              KeyPath="yes"
+              DiskId="1" />
+      </Component>
 
       <Component>
         <File Id="Newtonsoft.Json.dll"
@@ -117,42 +118,33 @@
       </Component>
       
       <Component>
-        <File Id="TWIConnect.Client.Service.exe.config" 
-              Name="TWIConnect.Client.Service.exe.config" 
-              Source="..\$(var.TWIConnect.Client.Service.ProjectName)\bin\$(var.TWIConnect.Client.Service.Configuration)\TWIConnect.Client.Service.exe.config"
-              Vital="yes" 
-              KeyPath="yes"
-              DiskId="1" />
-			</Component>
 
-      <Component>
-        
-        <File Id="TWIConnect.Client.Service.exe" 
-              Name="$(var.TWIConnect.Client.Service.TargetFileName)" 
+        <File Id="TWIConnect.Client.Service.exe"
+              Name="$(var.TWIConnect.Client.Service.TargetFileName)"
               Source="$(var.TWIConnect.Client.Service.TargetPath)"
-              Vital="yes" 
+              Vital="yes"
               KeyPath="yes"
               DiskId="1" />
-        
-				<ServiceInstall Id="ServiceInstaller"
+
+        <ServiceInstall Id="ServiceInstaller"
 					              Type="ownProcess"
 					              Vital="yes"
-				                Name="TWIConnectV2"
-					              DisplayName="TWIConnectV2"
+				                Name="TWIConnectV3"
+					              DisplayName="TWIConnectV3"
 					              Description="Unattended backup agent."
 					              Start="auto"
 					              Account="LocalSystem"
 					              ErrorControl="normal"
 					              Interactive="no" />
 
-        <ServiceControl Id="StartService" 
-                        Start="install" 
-                        Stop="uninstall" 
-                        Remove="uninstall" 
-                        Name="TWIConnectV2" 
+        <ServiceControl Id="StartService"
+                        Start="install"
+                        Stop="uninstall"
+                        Remove="uninstall"
+                        Name="TWIConnectV3"
                         Wait="yes" />
-			</Component>
-  </ComponentGroup>
-	</Fragment>
+      </Component>
+    </ComponentGroup>
+  </Fragment>
 
 </Wix>
