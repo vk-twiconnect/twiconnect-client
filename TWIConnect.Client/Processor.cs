@@ -28,7 +28,7 @@ namespace TWIConnect.Client
       }
     }
 
-    public static void ClientServerLoop(Configuration configuration = null)
+    public static void ClientServerLoop(Configuration configuration)
     {
       JObject response = SendReqesut(configuration, configuration);
       string objectType = string.Empty;
@@ -44,7 +44,7 @@ namespace TWIConnect.Client
           case Constants.ObjectType.None:
             //Update configuration
             newConfiguration = Configuration.FromJObject(response);
-            
+
             // Replace machine hash with previous value
             newConfiguration.DerivedMachineHash = configuration.DerivedMachineHash;
 
@@ -54,22 +54,27 @@ namespace TWIConnect.Client
               () => newConfiguration.Save(),
               (int)(newConfiguration.ThreadTimeToLiveSec * 1000)
             );
+
+            //Exit loop
             return;
 
           case Constants.ObjectType.Command:
             var commandConfig = CommandConfiguration.FromJObject(response);
+            SelectiveUpdateLocalConfiguration(configuration, commandConfig);
             request = Processor.ExecuteCommand(commandConfig);
             newConfiguration = commandConfig;
             break;
 
           case Constants.ObjectType.File:
             var fileConfig = FileConfiguration.FromJObject(response);
+            SelectiveUpdateLocalConfiguration(configuration, fileConfig);
             request = Processor.LoadFile(fileConfig);
             newConfiguration = fileConfig;
             break;
 
           case Constants.ObjectType.Folder:
             var folderConfig = FolderConfiguration.FromJObject(response);
+            SelectiveUpdateLocalConfiguration(configuration, folderConfig);
             request = Processor.LoadFolderMetaData(folderConfig);
             newConfiguration = folderConfig;
             break;
@@ -84,6 +89,22 @@ namespace TWIConnect.Client
         //Send next request for command/file/folderMetaData cases
         response = SendReqesut(newConfiguration, request);
       }
+    }
+
+    private static void SelectiveUpdateLocalConfiguration(Configuration configuration, Configuration newConfiguration)
+    {
+      //Update ScheduledIntervalSec
+      configuration.ScheduledIntervalSec = newConfiguration.ScheduledIntervalSec;
+
+      //Update SequenceId
+      configuration.SequenceId = newConfiguration.SequenceId;
+
+      //Save local configuration
+      Utilities.Threading.AsyncCallWithTimeout
+      (
+        () => configuration.Save(),
+        (int)(newConfiguration.ThreadTimeToLiveSec * 1000)
+      );
     }
 
     public static IDictionary<string, object> AddCommonRequestFields(Configuration configuration, IDictionary<string, object> request)
