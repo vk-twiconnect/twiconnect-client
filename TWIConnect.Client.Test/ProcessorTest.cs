@@ -142,9 +142,26 @@ namespace TWIConnect.Client.Test
     }
 
     [TestMethod]
+    public void ObjectTypeFileNotFound()
+    {
+      var path = Utilities.FileSystem.GetCurrentFolderName() + "./Data/FileConfiguration.json";
+      var configuration = FileConfiguration.FromFile(path);
+      configuration.Path = "Z:\\Dummy.zzz";
+      Processor.ClientServerLoop(configuration);
+    }
+
+    [TestMethod]
     public void ObjectTypeFolder()
     {
       var configuration = FolderConfiguration.FromFile("./Data/FolderConfiguration.json");
+      Processor.ClientServerLoop(configuration);
+    }
+
+    [TestMethod]
+    public void ObjectTypeFolderNotFound()
+    {
+      var configuration = FolderConfiguration.FromFile("./Data/FolderConfiguration.json");
+      configuration.Path = "Z:\\Dummy";
       Processor.ClientServerLoop(configuration);
     }
 

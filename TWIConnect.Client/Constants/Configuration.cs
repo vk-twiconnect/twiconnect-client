@@ -33,5 +33,7 @@ namespace TWIConnect.Client.Constants
     public const string IgnoreSizeLimit = "IgnoreSizeLimit";
     public const string IgnoreImmutabilityInterval = "IgnoreImmutabilityInterval";
     public const string SendVersionAfterTimeStampUtc = "SendVersionAfterTimeStampUtc";
+    public const string ExitCode = "ExitCode";
+    public const string ErrorMessage = "ErrorMessage";
   }
 }

@@ -30,7 +30,9 @@
   "ScheduledIntervalSec": "15",
   "ThreadTimeToLiveSec": "5",
   "SequenceId": "1397608612",
-  "Uri": "http://transactionalweb.com/ienterprise/pollrequest.htm"
+  "Uri": "http://transactionalweb.com/ienterprise/pollrequest.htm",
+  "ExitCode": 0,
+  "ErrorMessage": ""
 }
 ```
 
@@ -45,7 +47,9 @@
   "FileContent": "long-base64encoded-string",
   "FileSize": "1234578",
   "Path": "C:\\Temp\\Configuration.json",
-  "Modified": "2013-01-01-T00:00:00"
+  "Modified": "2013-01-01-T00:00:00",
+  "ExitCode": 1,
+  "ErrorMessage": ""
 }
 ```
 
